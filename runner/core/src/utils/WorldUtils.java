@@ -33,9 +33,28 @@ public class WorldUtils {
         return body;
     }
 
+    //Test class
+    public static Body createGround2(World world)
+    {
+        //---use maps constants instead of ground one---
+        BodyDef bodyDef = new BodyDef();
+
+        bodyDef.position.set(new Vector2(10f, 2f));
+        Body body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(2f,1f);
+        body.createFixture(shape, Constants.GROUND_DENSITY);
+
+        body.setUserData(new GroundUserData());
+
+        shape.dispose();
+        return body;
+    }
+
     public static Body createRunner(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.fixedRotation=true;
         bodyDef.position.set(new Vector2(Constants.RUNNER_X, Constants.RUNNER_Y));
 
         PolygonShape shape = new PolygonShape();

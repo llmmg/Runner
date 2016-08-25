@@ -26,7 +26,7 @@ public class GameStage extends Stage implements ContactListener {
 
     private World world;
     private Ground ground;
-    private Ground ground2; //Test
+    private Ground g2; //Test
     private Runner runner;
 
     private final float TIME_STEP = 1 / 300f;
@@ -101,10 +101,10 @@ public class GameStage extends Stage implements ContactListener {
 
         //test------------
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(new Vector2(Constants.GROUND_X, 3f));
+        bodyDef.position.set(new Vector2(Constants.GROUND_X, 5f));
         Body body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.GROUND_WIDTH / 4, Constants.GROUND_HEIGHT/2);
+        shape.setAsBox(2f, 2f);
         body.createFixture(shape, Constants.GROUND_DENSITY);
 
         body.setUserData(new GroundUserData());
@@ -114,6 +114,9 @@ public class GameStage extends Stage implements ContactListener {
         //test end---------------
 
         addActor(ground);
+
+        Ground g3= new Ground(WorldUtils.createGround2(world));
+        addActor(g3);
 
     }
 
