@@ -2,14 +2,17 @@ package stages;
 
 import actors.Ground;
 import actors.Runner;
+import box2d.GroundUserData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Rectangle;
 import utils.BodyUtils;
+import utils.Constants;
 import utils.WorldUtils;
 
 /**
@@ -23,6 +26,7 @@ public class GameStage extends Stage implements ContactListener {
 
     private World world;
     private Ground ground;
+    private Ground ground2; //Test
     private Runner runner;
 
     private final float TIME_STEP = 1 / 300f;
@@ -74,6 +78,7 @@ public class GameStage extends Stage implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
+//        System.out.println("up");
     }
 
     @Override
@@ -93,7 +98,23 @@ public class GameStage extends Stage implements ContactListener {
 
     private void setUpGround() {
         ground = new Ground(WorldUtils.createGround(world));
+
+        //test------------
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(new Vector2(Constants.GROUND_X, 3f));
+        Body body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Constants.GROUND_WIDTH / 4, Constants.GROUND_HEIGHT/2);
+        body.createFixture(shape, Constants.GROUND_DENSITY);
+
+        body.setUserData(new GroundUserData());
+
+        shape.dispose();
+        addActor(new Ground(body));
+        //test end---------------
+
         addActor(ground);
+
     }
 
     private void setupCamera() {
