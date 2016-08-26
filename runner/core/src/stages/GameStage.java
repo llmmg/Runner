@@ -6,9 +6,17 @@ import box2d.GroundUserData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Rectangle;
 import utils.BodyUtils;
@@ -38,6 +46,13 @@ public class GameStage extends Stage implements ContactListener {
     private Rectangle screenRightSide;
     private Rectangle screenLeftSide;
 
+
+    private TiledMap tileMap;
+    private int tileMapWidth;
+    private int tileMapHeight;
+    private int tileSize;
+    private OrthogonalTiledMapRenderer tmRenderer;
+
     private Vector3 touchPoint;
 
     public GameStage() {
@@ -59,10 +74,61 @@ public class GameStage extends Stage implements ContactListener {
 
         //handling contacts
         world.setContactListener(this);
-        setUpGround();
+        //setUpGround();
         setUpRunner();
+        createWalls();
     }
 
+    private void createWalls() {
+        tileMap = new TmxMapLoader().load("C:\\Users\\damien.gygi\\Documents\\HES d'été DLM\\Runner\\runner\\core\\assets\\map\\level.tmx");
+        tileMapWidth = tileMap.getProperties().get("width", Integer.class);
+        tileMapHeight=tileMap.getProperties().get("height", Integer.class);
+        tileSize=tileMap.getProperties().get("tilewidth",Integer.class);
+        tmRenderer = new OrthogonalTiledMapRenderer(tileMap,1/32f);
+        TiledMapTileLayer layer;
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
+        createBlocks(layer);
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("green");
+        createBlocks(layer);
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("blue");
+        createBlocks(layer);
+    }
+
+    private void createBlocks(TiledMapTileLayer layer) {
+
+        // tile size
+        float ts = layer.getTileWidth();
+
+        // go through all cells in layer
+        for(int row = 0; row < layer.getHeight(); row++) {
+            for(int col = 0; col < layer.getWidth(); col++) {
+
+                // get cell
+                Cell cell = layer.getCell(col, row);
+
+                // check that there is a cell
+                if(cell == null) continue;
+                if(cell.getTile() == null) continue;
+
+                // create body from cell
+                BodyDef bdef = new BodyDef();
+                bdef.type = BodyType.StaticBody;
+                bdef.position.set(col+0.5f,row+0.5f);
+
+                Body body = world.createBody(bdef);
+                PolygonShape shape = new PolygonShape();
+                shape.setAsBox(0.5f,0.5f);
+
+                body.createFixture(shape,Constants.GROUND_DENSITY);
+                body.setUserData(new GroundUserData());
+                shape.dispose();
+                addActor(new Ground(body));
+                //cs.dispose();
+
+            }
+        }
+
+    }
     @Override
     public void beginContact(Contact contact) {
         Body a = contact.getFixtureA().getBody();
@@ -144,9 +210,14 @@ public class GameStage extends Stage implements ContactListener {
     @Override
     public void draw() {
         super.draw();
+        tmRenderer.setView(camera);
+//        TiledMapTileLayer layer;
+//        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
+//        tmRenderer.renderTileLayer(layer);
+        tmRenderer.render();
         renderer.render(world, camera.combined);
-    }
 
+    }
     //(look at inputProcessor for methodes...)
     @Override
     public boolean keyDown(int keycode) {
