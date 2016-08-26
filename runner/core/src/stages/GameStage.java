@@ -1,5 +1,6 @@
 package stages;
 
+import actors.Background;
 import actors.Ground;
 import actors.Runner;
 import box2d.GroundUserData;
@@ -77,10 +78,12 @@ public class GameStage extends Stage implements ContactListener {
         //setUpGround();
         setUpRunner();
         createWalls();
+
+        addActor(new Background());
     }
 
     private void createWalls() {
-        tileMap = new TmxMapLoader().load("C:\\Users\\damien.gygi\\Documents\\HES d'été DLM\\Runner\\runner\\core\\assets\\map\\level.tmx");
+        tileMap = new TmxMapLoader().load("core\\assets\\map\\level.tmx");
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight=tileMap.getProperties().get("height", Integer.class);
         tileSize=tileMap.getProperties().get("tilewidth",Integer.class);

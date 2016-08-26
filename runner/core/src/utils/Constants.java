@@ -30,4 +30,6 @@ public class Constants {
     public static final float RUNNER_DODGE_Y=1.5f;
 
     public static final Vector2 RUNNER_VELOCITY= new Vector2(10f,0);
+
+    public static final String BACKGROUND_IMAGE_PATH= "core//assets//badlogic.jpg";
 }
