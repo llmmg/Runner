@@ -1,0 +1,19 @@
+atlas-.png
+size: 128, 128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+test
+  rotate: false
+  xy: 1, 1
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+test2
+  rotate: false
+  xy: 35, 1
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
