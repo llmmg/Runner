@@ -55,7 +55,7 @@ public class WorldUtils {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.fixedRotation=true;
-        bodyDef.position.set(new Vector2(Constants.RUNNER_X, Constants.RUNNER_Y));
+        bodyDef.position.set(new Vector2(Constants.RUNNER_X*32, Constants.RUNNER_Y*32));
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(Constants.RUNNER_WIDTH / 2, Constants.RUNNER_HEIGHT / 2);

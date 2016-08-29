@@ -12,6 +12,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -30,8 +32,8 @@ import utils.WorldUtils;
 public class GameStage extends Stage implements ContactListener {
 
     // This will be our viewport measurements while working with the debug renderer
-    private static final int VIEWPORT_WIDTH = 20;
-    private static final int VIEWPORT_HEIGHT = 13;
+    private static final int VIEWPORT_WIDTH = Constants.APP_WIDTH;
+    private static final int VIEWPORT_HEIGHT = Constants.APP_HEIGHT;
 
     private World world;
     private Ground ground;
@@ -57,6 +59,8 @@ public class GameStage extends Stage implements ContactListener {
     private Vector3 touchPoint;
 
     public GameStage() {
+        super(new ScalingViewport(Scaling.stretch, VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
+                new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)));
         setUpWorld();
         setupCamera();
         setUpTouchControlAreas();
@@ -87,7 +91,7 @@ public class GameStage extends Stage implements ContactListener {
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight=tileMap.getProperties().get("height", Integer.class);
         tileSize=tileMap.getProperties().get("tilewidth",Integer.class);
-        tmRenderer = new OrthogonalTiledMapRenderer(tileMap,1/32f);
+        tmRenderer = new OrthogonalTiledMapRenderer(tileMap,1f);
         TiledMapTileLayer layer;
         layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
         createBlocks(layer);
@@ -116,11 +120,11 @@ public class GameStage extends Stage implements ContactListener {
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyType.StaticBody;
-                bdef.position.set(col+0.5f,row+0.5f);
+                bdef.position.set((col+0.5f)*ts,(row+0.5f)*ts);
 
                 Body body = world.createBody(bdef);
                 PolygonShape shape = new PolygonShape();
-                shape.setAsBox(0.5f,0.5f);
+                shape.setAsBox(16f,16f);
 
                 body.createFixture(shape,Constants.GROUND_DENSITY);
                 body.setUserData(new GroundUserData());
