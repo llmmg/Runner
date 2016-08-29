@@ -77,9 +77,9 @@ public class GameStage extends Stage implements ContactListener {
         world.setContactListener(this);
         //setUpGround();
         setUpRunner();
-        createWalls();
+        //createWalls();
 
-        addActor(new Background());
+      //  addActor(new Background());
     }
 
     private void createWalls() {
@@ -191,6 +191,7 @@ public class GameStage extends Stage implements ContactListener {
 
     private void setupCamera() {
         camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+//        camera.setToOrtho(false,Constants.APP_WIDTH,Constants.APP_HEIGHT);
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
         camera.update();
     }
@@ -213,11 +214,12 @@ public class GameStage extends Stage implements ContactListener {
     @Override
     public void draw() {
         super.draw();
-        tmRenderer.setView(camera);
+        camera.update();
+        //tmRenderer.setView(camera);
 //        TiledMapTileLayer layer;
 //        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
 //        tmRenderer.renderTileLayer(layer);
-        tmRenderer.render();
+        //tmRenderer.render();
         renderer.render(world, camera.combined);
 
     }
@@ -245,13 +247,14 @@ public class GameStage extends Stage implements ContactListener {
                 runner.stopRunning();
                 break;
             case Input.Keys.RIGHT:
+                //camera.position.x+=1f;
                 runner.runRight();
                 break;
             case Input.Keys.LEFT:
+                //camera.position.x-=1f;
                 runner.runLeft();
                 break;
         }
-
         return super.keyDown(keycode);
     }
 
@@ -287,6 +290,7 @@ public class GameStage extends Stage implements ContactListener {
         }
         return super.touchUp(screenX, screenY, pointer, button);
     }
+
 
     private boolean rightSideTouched(float x, float y) {
         return screenRightSide.contains(x, y);

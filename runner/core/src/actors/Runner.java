@@ -1,8 +1,18 @@
 package actors;
 
 import box2d.RunnerUserData;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import utils.Constants;
 
 /**
  * Created by Lancelot on 23.08.2016.
@@ -12,10 +22,26 @@ public class Runner extends GameActor {
     private boolean jumping;
     private boolean dodging;
     private boolean running;
-
-
+    private Animation runningAnimation;
+    private  float stateTime;
     public Runner(Body body) {
         super(body);
+        TextureAtlas textureAtlas = new TextureAtlas(Constants.CHARACTERS_ATLAS_PATH);
+        TextureRegion[] runningFrames = new TextureRegion[Constants.RUNNER_RUNNING_REGION_NAMES.length];
+        for (int i = 0; i < Constants.RUNNER_RUNNING_REGION_NAMES.length; i++) {
+            String path = Constants.RUNNER_RUNNING_REGION_NAMES[i];
+            runningFrames[i] = textureAtlas.findRegion(path);
+        }
+        runningAnimation = new Animation(0.1f, runningFrames);
+        stateTime = 0f;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        stateTime += Gdx.graphics.getDeltaTime();
+        batch.draw(runningAnimation.getKeyFrame(stateTime, true), 0, 0,
+                100, 100);
     }
 
     @Override
@@ -38,6 +64,7 @@ public class Runner extends GameActor {
 //            body.setLinearVelocity(10f,0);
         }
     }
+
     public void runLeft(){
         if(!(dodging)){
             getUserData().setLinearVelocity(new Vector2(-10f,body.getLinearVelocity().y));
