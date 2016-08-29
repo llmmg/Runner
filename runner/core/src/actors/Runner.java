@@ -40,7 +40,7 @@ public class Runner extends GameActor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         stateTime += Gdx.graphics.getDeltaTime();
-        batch.draw(runningAnimation.getKeyFrame(stateTime, true), 0, 0,
+        batch.draw(runningAnimation.getKeyFrame(stateTime, true), getUserData().getRunningPosition().x, getUserData().getRunningPosition().y,
                 100, 100);
     }
 

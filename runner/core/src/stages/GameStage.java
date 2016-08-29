@@ -77,7 +77,7 @@ public class GameStage extends Stage implements ContactListener {
         world.setContactListener(this);
         //setUpGround();
         setUpRunner();
-        //createWalls();
+        createWalls();
 
       //  addActor(new Background());
     }
@@ -192,7 +192,7 @@ public class GameStage extends Stage implements ContactListener {
     private void setupCamera() {
         camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 //        camera.setToOrtho(false,Constants.APP_WIDTH,Constants.APP_HEIGHT);
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
+        camera.position.set(camera.viewportWidth /2, camera.viewportHeight / 2, 0f);
         camera.update();
     }
 
@@ -214,6 +214,7 @@ public class GameStage extends Stage implements ContactListener {
     @Override
     public void draw() {
         super.draw();
+        camera.position.set(runner.getUserData().getRunningPosition().x,runner.getUserData().getRunningPosition().y,0f);
         camera.update();
         //tmRenderer.setView(camera);
 //        TiledMapTileLayer layer;
