@@ -36,6 +36,7 @@ public class GameStage extends Stage implements ContactListener {
     // This will be our viewport measurements while working with the debug renderer
     private static final int VIEWPORT_WIDTH = Constants.APP_WIDTH;
     private static final int VIEWPORT_HEIGHT = Constants.APP_HEIGHT;
+    private final float SCALE = 32;//WORLD_TO_STAGE_SCALE
 
     private World world;
     private Ground ground;
@@ -64,17 +65,17 @@ public class GameStage extends Stage implements ContactListener {
                 new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)));
         setUpWorld();
         setupCamera();
-//        setUpTouchControlAreas();
+        setUpTouchControlAreas();
         renderer = new Box2DDebugRenderer();
     }
 
     //useless
-//    private void setUpTouchControlAreas() {
-//        touchPoint = new Vector3();
-//        screenLeftSide = new Rectangle(0, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
-//        screenRightSide = new Rectangle(getCamera().viewportWidth / 2, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
-//        Gdx.input.setInputProcessor(this);
-//    }
+    private void setUpTouchControlAreas() {
+        touchPoint = new Vector3();
+        screenLeftSide = new Rectangle(0, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
+        screenRightSide = new Rectangle(getCamera().viewportWidth / 2, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
+        Gdx.input.setInputProcessor(this);
+    }
 
     private void setUpWorld() {
         world = WorldUtils.createWorld();
@@ -122,11 +123,11 @@ public class GameStage extends Stage implements ContactListener {
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyType.StaticBody;
-                bdef.position.set((col+0.5f)*ts,(row+0.5f)*ts);
+                bdef.position.set((col+0.5f),(row+0.5f));
 
                 Body body = world.createBody(bdef);
                 PolygonShape shape = new PolygonShape();
-                shape.setAsBox(16f,16f);
+                shape.setAsBox(0.5f,0.5f);
 
                 body.createFixture(shape,Constants.GROUND_DENSITY);
                 body.setUserData(new GroundUserData());
@@ -196,12 +197,14 @@ public class GameStage extends Stage implements ContactListener {
     }
 
     private void setupCamera() {
-        camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
+        camera = new OrthographicCamera(scale(VIEWPORT_WIDTH),scale(VIEWPORT_HEIGHT));
 //        camera.setToOrtho(false,Constants.APP_WIDTH,Constants.APP_HEIGHT);
-        camera.position.set(camera.viewportWidth /2, camera.viewportHeight / 2, 0f);
+        camera.position.set(scale(VIEWPORT_WIDTH)/2, scale(VIEWPORT_HEIGHT)/2, 0f);
         camera.update();
     }
-
+    public float scale(float valueToBeScaled) {
+        return valueToBeScaled/SCALE;
+    }
     @Override
     public void act(float delta) {
         super.act(delta);
