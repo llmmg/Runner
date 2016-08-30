@@ -2,6 +2,8 @@ package stages;
 
 import actors.Background;
 import actors.Ground;
+import actors.HUD.ButtonPause;
+import actors.HUD.TextScore;
 import actors.Runner;
 import box2d.GroundUserData;
 import com.badlogic.gdx.Gdx;
@@ -49,7 +51,6 @@ public class GameStage extends Stage implements ContactListener {
     private Rectangle screenRightSide;
     private Rectangle screenLeftSide;
 
-
     private TiledMap tileMap;
     private int tileMapWidth;
     private int tileMapHeight;
@@ -63,16 +64,17 @@ public class GameStage extends Stage implements ContactListener {
                 new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)));
         setUpWorld();
         setupCamera();
-        setUpTouchControlAreas();
+//        setUpTouchControlAreas();
         renderer = new Box2DDebugRenderer();
     }
 
-    private void setUpTouchControlAreas() {
-        touchPoint = new Vector3();
-        screenLeftSide = new Rectangle(0, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
-        screenRightSide = new Rectangle(getCamera().viewportWidth / 2, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
-        Gdx.input.setInputProcessor(this);
-    }
+    //useless
+//    private void setUpTouchControlAreas() {
+//        touchPoint = new Vector3();
+//        screenLeftSide = new Rectangle(0, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
+//        screenRightSide = new Rectangle(getCamera().viewportWidth / 2, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
+//        Gdx.input.setInputProcessor(this);
+//    }
 
     private void setUpWorld() {
         world = WorldUtils.createWorld();
