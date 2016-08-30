@@ -36,7 +36,6 @@ public class GameStage extends Stage implements ContactListener {
     // This will be our viewport measurements while working with the debug renderer
     private static final int VIEWPORT_WIDTH = Constants.APP_WIDTH;
     private static final int VIEWPORT_HEIGHT = Constants.APP_HEIGHT;
-    private final float SCALE = 32;//WORLD_TO_STAGE_SCALE
 
     private World world;
     private Ground ground;
@@ -203,7 +202,7 @@ public class GameStage extends Stage implements ContactListener {
         camera.update();
     }
     public float scale(float valueToBeScaled) {
-        return valueToBeScaled/SCALE;
+        return valueToBeScaled/Constants.SCALE;
     }
     @Override
     public void act(float delta) {
