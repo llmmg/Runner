@@ -85,15 +85,15 @@ public class GameStage extends Stage implements ContactListener {
         setUpRunner();
         createWalls();
 
-      //  addActor(new Background());
+        //  addActor(new Background());
     }
 
     private void createWalls() {
         tileMap = new TmxMapLoader().load("core\\assets\\map\\level.tmx");
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
-        tileMapHeight=tileMap.getProperties().get("height", Integer.class);
-        tileSize=tileMap.getProperties().get("tilewidth",Integer.class);
-        tmRenderer = new OrthogonalTiledMapRenderer(tileMap,1f);
+        tileMapHeight = tileMap.getProperties().get("height", Integer.class);
+        tileSize = tileMap.getProperties().get("tilewidth", Integer.class);
+        tmRenderer = new OrthogonalTiledMapRenderer(tileMap, 1f);
         TiledMapTileLayer layer;
         layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
         createBlocks(layer);
@@ -109,26 +109,26 @@ public class GameStage extends Stage implements ContactListener {
         float ts = layer.getTileWidth();
 
         // go through all cells in layer
-        for(int row = 0; row < layer.getHeight(); row++) {
-            for(int col = 0; col < layer.getWidth(); col++) {
+        for (int row = 0; row < layer.getHeight(); row++) {
+            for (int col = 0; col < layer.getWidth(); col++) {
 
                 // get cell
                 Cell cell = layer.getCell(col, row);
 
                 // check that there is a cell
-                if(cell == null) continue;
-                if(cell.getTile() == null) continue;
+                if (cell == null) continue;
+                if (cell.getTile() == null) continue;
 
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyType.StaticBody;
-                bdef.position.set((col+0.5f),(row+0.5f));
+                bdef.position.set((col + 0.5f), (row + 0.5f));
 
                 Body body = world.createBody(bdef);
                 PolygonShape shape = new PolygonShape();
-                shape.setAsBox(0.5f,0.5f);
+                shape.setAsBox(0.5f, 0.5f);
 
-                body.createFixture(shape,Constants.GROUND_DENSITY);
+                body.createFixture(shape, Constants.GROUND_DENSITY);
                 body.setUserData(new GroundUserData());
                 shape.dispose();
                 addActor(new Ground(body));
@@ -138,6 +138,7 @@ public class GameStage extends Stage implements ContactListener {
         }
 
     }
+
     @Override
     public void beginContact(Contact contact) {
         Body a = contact.getFixtureA().getBody();
@@ -190,20 +191,22 @@ public class GameStage extends Stage implements ContactListener {
 
         addActor(ground);
 
-        Ground g3= new Ground(WorldUtils.createGround2(world));
+        Ground g3 = new Ground(WorldUtils.createGround2(world));
         addActor(g3);
 
     }
 
     private void setupCamera() {
-        camera = new OrthographicCamera(scale(VIEWPORT_WIDTH),scale(VIEWPORT_HEIGHT));
+        camera = new OrthographicCamera(scale(VIEWPORT_WIDTH), scale(VIEWPORT_HEIGHT));
 //        camera.setToOrtho(false,Constants.APP_WIDTH,Constants.APP_HEIGHT);
-        camera.position.set(scale(VIEWPORT_WIDTH)/2, scale(VIEWPORT_HEIGHT)/2, 0f);
+        camera.position.set(scale(VIEWPORT_WIDTH) / 2, scale(VIEWPORT_HEIGHT) / 2, 0f);
         camera.update();
     }
+
     public float scale(float valueToBeScaled) {
-        return valueToBeScaled/Constants.SCALE;
+        return valueToBeScaled / Constants.SCALE;
     }
+
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -222,7 +225,7 @@ public class GameStage extends Stage implements ContactListener {
     @Override
     public void draw() {
         super.draw();
-        camera.position.set(runner.getUserData().getRunningPosition().x,runner.getUserData().getRunningPosition().y,0f);
+        camera.position.set(runner.getUserData().getRunningPosition().x, runner.getUserData().getRunningPosition().y, 0f);
         camera.update();
         //tmRenderer.setView(camera);
 //        TiledMapTileLayer layer;
@@ -232,6 +235,7 @@ public class GameStage extends Stage implements ContactListener {
         renderer.render(world, camera.combined);
 
     }
+
     //(look at inputProcessor for methodes...)
     @Override
     public boolean keyDown(int keycode) {
@@ -272,7 +276,7 @@ public class GameStage extends Stage implements ContactListener {
         if (runner.isDodging() && keycode == Input.Keys.DOWN) {
             runner.stopDodge();
         }
-        if (keycode == Input.Keys.RIGHT || keycode==Input.Keys.LEFT) {
+        if (keycode == Input.Keys.RIGHT || keycode == Input.Keys.LEFT) {
             runner.stopRunning();
         }
         return super.keyUp(keycode);

@@ -23,7 +23,8 @@ public class Runner extends GameActor {
     private boolean dodging;
     private boolean running;
     private Animation runningAnimation;
-    private  float stateTime;
+    private float stateTime;
+
     public Runner(Body body) {
         super(body);
         TextureAtlas textureAtlas = new TextureAtlas(Constants.CHARACTERS_ATLAS_PATH);
@@ -40,8 +41,8 @@ public class Runner extends GameActor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         stateTime += Gdx.graphics.getDeltaTime();
-        batch.draw(runningAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH/2 - Constants.RUNNER_WIDTH*Constants.SCALE , (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT*Constants.SCALE)/2,
-                Constants.RUNNER_X*Constants.SCALE, Constants.RUNNER_Y*Constants.SCALE);
+        batch.draw(runningAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+                Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
     }
 
     @Override
@@ -50,33 +51,35 @@ public class Runner extends GameActor {
     }
 
     @Override
-    public void act(float delta)
-    {
+    public void act(float delta) {
         super.act(delta);
         getUserData().setRunningPosition(body.getPosition());
-        if(running)
-            body.setLinearVelocity(getUserData().getLinearVelocity().x,body.getLinearVelocity().y);
+        if (running)
+            body.setLinearVelocity(getUserData().getLinearVelocity().x, body.getLinearVelocity().y);
     }
-    public void runRight(){
-        if(!(dodging)){
-            running=true;
-            getUserData().setLinearVelocity(new Vector2(10f,body.getLinearVelocity().y));
+
+    public void runRight() {
+        if (!(dodging)) {
+            running = true;
+            getUserData().setLinearVelocity(new Vector2(10f, body.getLinearVelocity().y));
 //            body.setLinearVelocity(10f,0);
         }
     }
 
-    public void runLeft(){
-        if(!(dodging)){
-            getUserData().setLinearVelocity(new Vector2(-10f,body.getLinearVelocity().y));
+    public void runLeft() {
+        if (!(dodging)) {
+            getUserData().setLinearVelocity(new Vector2(-10f, body.getLinearVelocity().y));
 //            body.setLinearVelocity(-10f,0);
-            running=true;
+            running = true;
         }
     }
-    public void stopRunning(){
-        running=false;
-        if(!dodging)
-           body.setLinearVelocity(0,body.getLinearVelocity().y);
+
+    public void stopRunning() {
+        running = false;
+        if (!dodging)
+            body.setLinearVelocity(0, body.getLinearVelocity().y);
     }
+
     public void jump() {
         if (!(jumping || dodging)) {
             System.out.println("jump");
@@ -107,7 +110,7 @@ public class Runner extends GameActor {
 
     public void stopDodge() {
         dodging = false;
-        body.setTransform(body.getWorldCenter(),0f);
+        body.setTransform(body.getWorldCenter(), 0f);
     }
 
     public boolean isDodging() {
