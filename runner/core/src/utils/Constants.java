@@ -19,8 +19,8 @@ public class Constants {
 
     public static final float RUNNER_X = 2;
     public static final float RUNNER_Y = GROUND_Y + GROUND_HEIGHT;
-    public static final float RUNNER_WIDTH = 32f;
-    public static final float RUNNER_HEIGHT = 64f;
+    public static final float RUNNER_WIDTH = 1f;
+    public static final float RUNNER_HEIGHT = 2f;
     public static final float RUNNER_DENSITY = 0.5f;
 
     public static final  float RUNNER_GRAVITY_SCALE=3f; //gravity is amplified for a best gameplay
