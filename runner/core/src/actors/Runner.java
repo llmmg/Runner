@@ -22,14 +22,14 @@ public class Runner extends GameActor {
     private boolean jumping;
     private boolean dodging;
     private boolean running;
-    private Animation runningAnimation;
-    private static final int FRAME_COLS = 12;
-    private static final int FRAME_ROWS = 1;
 
     private Animation walkAnimation;
-    private Texture walkSheet;
+    private Animation idle;
+    private Texture spriteSheet;
     private TextureRegion[] walkFrames;
+    private TextureRegion[] idleFrames;
     private int imgWalk=12;
+    private int imgIdle=3;
 
     float stateTime;
     public Runner(Body body) {
@@ -43,18 +43,23 @@ public class Runner extends GameActor {
 //        }
 //        runningAnimation = new Animation(0.1f, runningFrames);
 //        stateTime = 0f;
-        walkSheet = new Texture(Gdx.files.internal(Constants.CHARACTER_ATLAS_PATH));
+
         walkFrames = new TextureRegion[imgWalk];
-        createAnimation(walkSheet,walkFrames);
+        createAnimation(walkFrames,Constants.CHARACTER_RUN_PATH,imgWalk);
         walkAnimation = new Animation(0.05f, walkFrames);
+
+        idleFrames= new TextureRegion[imgIdle];
+        createAnimation(idleFrames,Constants.CHARACTER_IDLE_PATH,imgIdle);
+        idle= new Animation(0.1f,idleFrames);
 
     }
 
-    public void createAnimation(Texture tex, TextureRegion[] texReg)
+    public void createAnimation( TextureRegion[] texReg,String name, int nbImg)
     {
-        TextureRegion[][] tmp = TextureRegion.split(tex, tex.getWidth() / imgWalk, tex.getHeight());
+        spriteSheet = new Texture(Gdx.files.internal(name));
+        TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / nbImg, spriteSheet.getHeight());
         int index = 0;
-        for (int i = 0; i < imgWalk; i++) {
+        for (int i = 0; i < nbImg; i++) {
             texReg[index++] = tmp[0][i];
         }
         stateTime = 0f;
@@ -63,8 +68,15 @@ public class Runner extends GameActor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         stateTime += Gdx.graphics.getDeltaTime();
-        batch.draw(walkAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
-                Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
+        if (running)
+        {
+            batch.draw(walkAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+                    Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
+        }
+        else {
+            batch.draw(idle.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+                    Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
+        }
     }
 
     @Override

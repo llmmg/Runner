@@ -5,7 +5,7 @@
  </tileset>
  <layer name="obstacle" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMApGwSgYGMBIZUwLM5HNppW7ScUAN2QASw==
+   eJxjYBgYwEiAPwqwg9FwIw+Mhht5fh4s4UYve7HZQw276eF+WrmdGLuGSrgR605q2suIg01Luyk1g1x3kmsvI5UxLcxENptW7iYVAwC6FABq
   </data>
  </layer>
 </map>
