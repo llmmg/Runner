@@ -150,4 +150,7 @@ public class Runner extends GameActor {
     public boolean isDodging() {
         return dodging;
     }
+    public boolean isJumping(){
+        return jumping;
+    }
 }

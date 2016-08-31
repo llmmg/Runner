@@ -145,8 +145,11 @@ public class GameStage extends Stage implements ContactListener {
         //if the runner touch the ground
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsGround(b)) ||
                 (BodyUtils.bodyIsGround(a) && BodyUtils.bodyIsRunner(b))) {
-            runner.landed();
-            System.out.println("down");
+//            if(a.getLinearVelocity().y==0 && b.getLinearVelocity().y==0)
+            if(contact.getWorldManifold().getNormal().y==-1f)
+                runner.landed();
+            System.out.println(contact.getWorldManifold().getNormal());
+                System.out.println("down");
         }
     }
 
@@ -157,7 +160,6 @@ public class GameStage extends Stage implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-
     }
 
     @Override
