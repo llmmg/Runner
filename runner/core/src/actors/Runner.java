@@ -23,8 +23,8 @@ public class Runner extends GameActor {
     private boolean dodging;
     private boolean running;
     private Animation runningAnimation;
-    private static final int FRAME_COLS = 16;
-    private static final int FRAME_ROWS = 1;
+    private static final int FRAME_COLS = 6;
+    private static final int FRAME_ROWS = 2;
 
     Animation walkAnimation;
     Texture walkSheet;
