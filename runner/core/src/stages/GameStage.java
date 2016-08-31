@@ -37,6 +37,8 @@ public class GameStage extends Stage implements ContactListener {
     private static final int VIEWPORT_WIDTH = Constants.APP_WIDTH;
     private static final int VIEWPORT_HEIGHT = Constants.APP_HEIGHT;
 
+    private boolean debug = false;
+
     private World world;
     private Ground ground;
     private Ground g2; //Test
@@ -93,13 +95,9 @@ public class GameStage extends Stage implements ContactListener {
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight = tileMap.getProperties().get("height", Integer.class);
         tileSize = tileMap.getProperties().get("tilewidth", Integer.class);
-        tmRenderer = new OrthogonalTiledMapRenderer(tileMap, 1f);
+        tmRenderer = new OrthogonalTiledMapRenderer(tileMap, 1/Constants.SCALE);
         TiledMapTileLayer layer;
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
-        createBlocks(layer);
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("green");
-        createBlocks(layer);
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("blue");
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("obstacle");
         createBlocks(layer);
     }
 
@@ -227,12 +225,16 @@ public class GameStage extends Stage implements ContactListener {
         super.draw();
         camera.position.set(runner.getUserData().getRunningPosition().x, runner.getUserData().getRunningPosition().y, 0f);
         camera.update();
-        //tmRenderer.setView(camera);
+
+        tmRenderer.setView(camera);
 //        TiledMapTileLayer layer;
 //        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
 //        tmRenderer.renderTileLayer(layer);
-        //tmRenderer.render();
-        renderer.render(world, camera.combined);
+        tmRenderer.render();
+
+        if(debug) {
+            renderer.render(world, camera.combined);
+        }
 
     }
 

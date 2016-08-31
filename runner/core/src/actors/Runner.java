@@ -23,17 +23,35 @@ public class Runner extends GameActor {
     private boolean dodging;
     private boolean running;
     private Animation runningAnimation;
-    private float stateTime;
+    private static final int FRAME_COLS = 16;
+    private static final int FRAME_ROWS = 1;
 
+    Animation walkAnimation;
+    Texture walkSheet;
+    TextureRegion[] walkFrames;
+
+    float stateTime;
     public Runner(Body body) {
         super(body);
-        TextureAtlas textureAtlas = new TextureAtlas(Constants.CHARACTERS_ATLAS_PATH);
-        TextureRegion[] runningFrames = new TextureRegion[Constants.RUNNER_RUNNING_REGION_NAMES.length];
-        for (int i = 0; i < Constants.RUNNER_RUNNING_REGION_NAMES.length; i++) {
-            String path = Constants.RUNNER_RUNNING_REGION_NAMES[i];
-            runningFrames[i] = textureAtlas.findRegion(path);
+//        TextureAtlas textureAtlas = new TextureAtlas(Constants.CHARACTERS_ATLAS_PATH);
+//        System.out.println(Constants.RUNNER_RUNNING_REGION_NAMES.length);
+//        TextureRegion[] runningFrames = new TextureRegion[Constants.RUNNER_RUNNING_REGION_NAMES.length];
+//        for (int i = 0; i < Constants.RUNNER_RUNNING_REGION_NAMES.length; i++) {
+//            String path = Constants.RUNNER_RUNNING_REGION_NAMES[i];
+//            runningFrames[i] = textureAtlas.findRegion(path);
+//        }
+//        runningAnimation = new Animation(0.1f, runningFrames);
+//        stateTime = 0f;
+        walkSheet = new Texture(Gdx.files.internal(Constants.CHARACTER_ATLAS_PATH));
+        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight() / FRAME_ROWS);              // #10
+        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+            for (int j = 0; j < FRAME_COLS; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
         }
-        runningAnimation = new Animation(0.1f, runningFrames);
+        walkAnimation = new Animation(0.05f, walkFrames);
         stateTime = 0f;
     }
 
@@ -41,7 +59,7 @@ public class Runner extends GameActor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         stateTime += Gdx.graphics.getDeltaTime();
-        batch.draw(runningAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+        batch.draw(walkAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
                 Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
     }
 

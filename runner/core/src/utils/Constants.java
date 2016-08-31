@@ -33,6 +33,9 @@ public class Constants {
     public static final Vector2 RUNNER_VELOCITY= new Vector2(10f,0);
 
     public static final String BACKGROUND_IMAGE_PATH= "core//assets//badlogic.jpg";
+
+    public static final String CHARACTER_ATLAS_PATH = "core//assets//walk.png";
+
     public static final String CHARACTERS_ATLAS_PATH = "core//assets//characters.txt";
     public static final String[] RUNNER_RUNNING_REGION_NAMES = new String[] {"alienGreen_run1", "alienGreen_run2"};
 }
