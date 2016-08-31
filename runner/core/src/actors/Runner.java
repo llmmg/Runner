@@ -23,12 +23,13 @@ public class Runner extends GameActor {
     private boolean dodging;
     private boolean running;
     private Animation runningAnimation;
-    private static final int FRAME_COLS = 6;
-    private static final int FRAME_ROWS = 2;
+    private static final int FRAME_COLS = 12;
+    private static final int FRAME_ROWS = 1;
 
-    Animation walkAnimation;
-    Texture walkSheet;
-    TextureRegion[] walkFrames;
+    private Animation walkAnimation;
+    private Texture walkSheet;
+    private TextureRegion[] walkFrames;
+    private int imgWalk=12;
 
     float stateTime;
     public Runner(Body body) {
@@ -43,18 +44,21 @@ public class Runner extends GameActor {
 //        runningAnimation = new Animation(0.1f, runningFrames);
 //        stateTime = 0f;
         walkSheet = new Texture(Gdx.files.internal(Constants.CHARACTER_ATLAS_PATH));
-        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight() / FRAME_ROWS);              // #10
-        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-        int index = 0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-            for (int j = 0; j < FRAME_COLS; j++) {
-                walkFrames[index++] = tmp[i][j];
-            }
-        }
+        walkFrames = new TextureRegion[imgWalk];
+        createAnimation(walkSheet,walkFrames);
         walkAnimation = new Animation(0.05f, walkFrames);
-        stateTime = 0f;
+
     }
 
+    public void createAnimation(Texture tex, TextureRegion[] texReg)
+    {
+        TextureRegion[][] tmp = TextureRegion.split(tex, tex.getWidth() / imgWalk, tex.getHeight());
+        int index = 0;
+        for (int i = 0; i < imgWalk; i++) {
+            texReg[index++] = tmp[0][i];
+        }
+        stateTime = 0f;
+    }
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
