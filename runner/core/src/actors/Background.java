@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import utils.Constants;
 
 /**
@@ -27,8 +28,11 @@ public class Background extends Actor {
 
     @Override
     public void act(float delta) {
+        System.out.println("texture1:"+textureRegionBounds1.x+" texture2: " + textureRegionBounds2.x);
         if (leftBoundsReached(delta)) {
-            resetBounds();
+            resetBounds(false);
+        } else if (rightBoundsReached(delta)) {
+            resetBounds(true);
         } else {
             updateXBounds(-delta);
         }
@@ -47,17 +51,29 @@ public class Background extends Actor {
         return (textureRegionBounds2.x - (delta * speed)) <= 0;
     }
 
+    private boolean rightBoundsReached(float delta) {
+        return (textureRegionBounds2.x - (delta * speed)) >= Constants.APP_WIDTH;
+    }
+
     private void updateXBounds(float delta) {
         textureRegionBounds1.x += delta * speed;
         textureRegionBounds2.x += delta * speed;
     }
-    public void setSpeed(float speed)
-    {
-        this.speed=(int)speed*10;
+
+    public void setSpeed(float speed) {
+        this.speed = (int) speed * 10;
     }
 
-    private void resetBounds() {
-        textureRegionBounds1 = textureRegionBounds2;
-        textureRegionBounds2 = new Rectangle(Constants.APP_WIDTH, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
+    private void resetBounds(boolean right) {
+        if (right) {
+            System.out.println("1");
+            textureRegionBounds2 = textureRegionBounds1;
+            textureRegionBounds1 = new Rectangle(-Constants.APP_WIDTH, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
+        } else {
+            System.out.println("2");
+            textureRegionBounds1 = textureRegionBounds2;
+            textureRegionBounds2 = new Rectangle(Constants.APP_WIDTH, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
+        }
+
     }
 }
