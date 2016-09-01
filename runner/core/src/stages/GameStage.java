@@ -186,7 +186,7 @@ public class GameStage extends Stage implements ContactListener {
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsGround(b)) ||
                 (BodyUtils.bodyIsGround(a) && BodyUtils.bodyIsRunner(b))) {
 //            if(a.getLinearVelocity().y==0 && b.getLinearVelocity().y==0)
-            if (contact.getWorldManifold().getNormal().y == -1f)
+            if (contact.getWorldManifold().getNormal().x == 0f) //or y==-1f
                 runner.landed();
             System.out.println(contact.getWorldManifold().getNormal());
             // contact between runner and deadzone

@@ -55,13 +55,18 @@ public class WorldUtils {
         bodyDef.position.set(new Vector2(Constants.RUNNER_X, Constants.RUNNER_Y));
 
         ChainShape chainShape = new ChainShape();
+        //Rectangle
         Vector2[] vects = new Vector2[4];
-        vects[0] = new Vector2(-Constants.RUNNER_WIDTH / 2, -Constants.RUNNER_HEIGHT / 2); //bot left
+        vects[0] = new Vector2(-Constants.RUNNER_WIDTH / 2, -Constants.RUNNER_HEIGHT / 4); //bot left
         vects[1] = new Vector2(-Constants.RUNNER_WIDTH / 2, Constants.RUNNER_HEIGHT / 2); //top left
         vects[2] = new Vector2(Constants.RUNNER_WIDTH / 2, Constants.RUNNER_HEIGHT / 2); //top right
-        vects[3] = new Vector2(Constants.RUNNER_WIDTH / 2, -Constants.RUNNER_HEIGHT / 2); //bot right
+        vects[3] = new Vector2(Constants.RUNNER_WIDTH / 2, -Constants.RUNNER_HEIGHT / 4); //bot right
         chainShape.createLoop(vects);
 
+        //circle
+        CircleShape circleShape= new CircleShape();
+        circleShape.setPosition(new Vector2(0,-Constants.RUNNER_HEIGHT/4));
+        circleShape.setRadius(Constants.RUNNER_WIDTH/2);
 //        PolygonShape shape = new PolygonShape();
 //        shape.setAsBox(Constants.RUNNER_WIDTH / 2, Constants.RUNNER_HEIGHT / 2);
 
@@ -69,11 +74,13 @@ public class WorldUtils {
         body.setGravityScale(Constants.RUNNER_GRAVITY_SCALE);
 //        body.createFixture(shape, Constants.RUNNER_DENSITY);
         body.createFixture(chainShape, Constants.RUNNER_DENSITY);
+        body.createFixture(circleShape,0);
         body.resetMassData();
         body.setUserData(new RunnerUserData());
 
 //        shape.dispose();
         chainShape.dispose();
+        circleShape.dispose();
 
         return body;
     }
