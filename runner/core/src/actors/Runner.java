@@ -19,7 +19,7 @@ public class Runner extends GameActor {
     private boolean dodging;
     private boolean running;
 
-    public enum direction{
+    public enum direction {
         LEFT,
         RIGHT
     }
@@ -27,6 +27,8 @@ public class Runner extends GameActor {
     private Animation walkAnimation;
     private Animation idleAnimation;
     private Animation jumpAnimation;
+    private Animation currentAnimation;
+
     private Texture spriteSheet;
     private TextureRegion[] walkFrames;
     private TextureRegion[] idleFrames;
@@ -34,7 +36,7 @@ public class Runner extends GameActor {
 
     private int imgWalk = 12;
     private int imgIdle = 3;
-    private int imgJump=3;
+    private int imgJump = 3;
 
     float stateTime;
 
@@ -54,7 +56,6 @@ public class Runner extends GameActor {
 //        stateTime = 0f;
 
 
-
         walkFrames = new TextureRegion[imgWalk];
         createAnimation(walkFrames, Constants.CHARACTER_RUN_PATH, imgWalk);
         walkAnimation = new Animation(0.05f, walkFrames);
@@ -64,8 +65,8 @@ public class Runner extends GameActor {
         idleAnimation = new Animation(0.1f, idleFrames);
 
         jumpFrames = new TextureRegion[imgJump];
-        createAnimation(jumpFrames,Constants.CHARACTER_JUMP_PATH,imgJump);
-        jumpAnimation= new Animation(0.1f,jumpFrames);
+        createAnimation(jumpFrames, Constants.CHARACTER_JUMP_PATH, imgJump);
+        jumpAnimation = new Animation(0.1f, jumpFrames);
 
     }
 
@@ -85,15 +86,17 @@ public class Runner extends GameActor {
         stateTime += Gdx.graphics.getDeltaTime();
 
         if (running && !jumping) {
-            batch.draw(walkAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
-                    Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
+            currentAnimation = walkAnimation;
         } else if (jumping) {
-            batch.draw(jumpAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
-                    Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
+            currentAnimation = jumpAnimation;
         } else {
-            batch.draw(idleAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
-                    Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
+            currentAnimation = idleAnimation;
         }
+
+        if(runnerDir==direction.LEFT)
+
+        batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+                Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
 
     }
 
@@ -115,7 +118,7 @@ public class Runner extends GameActor {
             running = true;
             getUserData().setLinearVelocity(new Vector2(10f, body.getLinearVelocity().y));
 //            body.setLinearVelocity(10f,0);
-            runnerDir=direction.RIGHT;
+            runnerDir = direction.RIGHT;
         }
     }
 
@@ -124,7 +127,7 @@ public class Runner extends GameActor {
             getUserData().setLinearVelocity(new Vector2(-10f, body.getLinearVelocity().y));
 //            body.setLinearVelocity(-10f,0);
             running = true;
-            runnerDir=direction.LEFT;
+            runnerDir = direction.LEFT;
         }
     }
 
@@ -132,6 +135,8 @@ public class Runner extends GameActor {
         running = false;
         if (!dodging)
             body.setLinearVelocity(0, body.getLinearVelocity().y);
+        //set dataSpeed to 0 when runner stop running
+        getUserData().setLinearVelocity(body.getLinearVelocity());
     }
 
     public void jump() {

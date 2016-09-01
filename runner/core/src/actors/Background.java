@@ -19,6 +19,7 @@ public class Background extends Actor {
     private int speed = 0;
 
     public Background() {
+        //TODO: multiple layout (like a static one for the sun and an infinite one for birds or something...)
         textureRegion = new TextureRegion(new Texture(Gdx.files.internal(Constants.BACKGROUND_IMAGE_PATH)));
         textureRegionBounds1 = new Rectangle(0 - Constants.APP_WIDTH / 2, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
         textureRegionBounds2 = new Rectangle(Constants.APP_WIDTH / 2, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
@@ -49,6 +50,10 @@ public class Background extends Actor {
     private void updateXBounds(float delta) {
         textureRegionBounds1.x += delta * speed;
         textureRegionBounds2.x += delta * speed;
+    }
+    public void setSpeed(float speed)
+    {
+        this.speed=(int)speed*10;
     }
 
     private void resetBounds() {

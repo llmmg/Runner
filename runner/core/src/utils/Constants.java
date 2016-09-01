@@ -30,9 +30,10 @@ public class Constants {
     public static final float RUNNER_DODGE_X =2f;
     public static final float RUNNER_DODGE_Y=1.5f;
 
-    public static final Vector2 RUNNER_VELOCITY= new Vector2(10f,0);
+    //useful for an infinite runner but not for our platformer
+    public static final Vector2 RUNNER_VELOCITY= new Vector2(0,0);
 
-    public static final String BACKGROUND_IMAGE_PATH= "core//assets//badlogic.jpg";
+    public static final String BACKGROUND_IMAGE_PATH= "core//assets//background.png";
 
     public static final String CHARACTER_RUN_PATH = "core//assets//sprites//runSprite.png";
     public static final String CHARACTER_IDLE_PATH = "core//assets//sprites//idle.png";

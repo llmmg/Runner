@@ -24,6 +24,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Rectangle;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import utils.BodyUtils;
 import utils.Constants;
 import utils.WorldUtils;
@@ -43,6 +44,7 @@ public class GameStage extends Stage implements ContactListener {
     private Ground ground;
     private Ground g2; //Test
     private Runner runner;
+    private Background background;
 
     private final float TIME_STEP = 1 / 300f;
     private float accumulator = 0f;
@@ -84,10 +86,14 @@ public class GameStage extends Stage implements ContactListener {
         //handling contacts
         world.setContactListener(this);
         //setUpGround();
+        setUpBackground();
         setUpRunner();
         createWalls();
+    }
 
-        //  addActor(new Background());
+    private void setUpBackground() {
+        background = new Background();
+        addActor(background);
     }
 
     private void createWalls() {
@@ -95,7 +101,7 @@ public class GameStage extends Stage implements ContactListener {
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight = tileMap.getProperties().get("height", Integer.class);
         tileSize = tileMap.getProperties().get("tilewidth", Integer.class);
-        tmRenderer = new OrthogonalTiledMapRenderer(tileMap, 1/Constants.SCALE);
+        tmRenderer = new OrthogonalTiledMapRenderer(tileMap, 1 / Constants.SCALE);
         TiledMapTileLayer layer;
         layer = (TiledMapTileLayer) tileMap.getLayers().get("obstacle");
         createBlocks(layer);
@@ -146,7 +152,7 @@ public class GameStage extends Stage implements ContactListener {
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsGround(b)) ||
                 (BodyUtils.bodyIsGround(a) && BodyUtils.bodyIsRunner(b))) {
 //            if(a.getLinearVelocity().y==0 && b.getLinearVelocity().y==0)
-            if(contact.getWorldManifold().getNormal().y==-1f)
+            if (contact.getWorldManifold().getNormal().y == -1f)
                 runner.landed();
             System.out.println(contact.getWorldManifold().getNormal());
 
@@ -225,16 +231,19 @@ public class GameStage extends Stage implements ContactListener {
     @Override
     public void draw() {
         super.draw();
+
         camera.position.set(runner.getUserData().getRunningPosition().x, runner.getUserData().getRunningPosition().y, 0f);
         camera.update();
 
+        background.setSpeed(runner.getUserData().getLinearVelocity().x);
+        System.out.println(runner.getUserData().getLinearVelocity().x);
         tmRenderer.setView(camera);
 //        TiledMapTileLayer layer;
 //        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
 //        tmRenderer.renderTileLayer(layer);
         tmRenderer.render();
 
-        if(debug) {
+        if (debug) {
             renderer.render(world, camera.combined);
         }
 
