@@ -1,10 +1,12 @@
 package stages;
 
 import actors.Background;
+import actors.DeadZone;
 import actors.Ground;
 import actors.HUD.ButtonPause;
 import actors.HUD.TextScore;
 import actors.Runner;
+import box2d.DeadZoneUserData;
 import box2d.GroundUserData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -105,8 +107,40 @@ public class GameStage extends Stage implements ContactListener {
         TiledMapTileLayer layer;
         layer = (TiledMapTileLayer) tileMap.getLayers().get("obstacle");
         createBlocks(layer);
-    }
 
+        layer =(TiledMapTileLayer) tileMap.getLayers().get("deadzone");
+        createDeadZone(layer);
+    }
+    private void createDeadZone(TiledMapTileLayer layer) {
+        // go through all cells in layer
+        for (int row = 0; row < layer.getHeight(); row++) {
+            for (int col = 0; col < layer.getWidth(); col++) {
+
+                // get cell
+                Cell cell = layer.getCell(col, row);
+
+                // check that there is a cell
+                if (cell == null) continue;
+                if (cell.getTile() == null) continue;
+
+                // create body from cell
+                BodyDef bdef = new BodyDef();
+                bdef.type = BodyType.StaticBody;
+                bdef.position.set((col + 0.5f), (row + 0.5f));
+
+                Body body = world.createBody(bdef);
+                PolygonShape shape = new PolygonShape();
+                shape.setAsBox(0.5f, 0.5f);
+
+                body.createFixture(shape, 0f);
+                body.setUserData(new DeadZoneUserData());
+                shape.dispose();
+                addActor(new DeadZone(body));
+                //cs.dispose();
+
+            }
+        }
+    }
     private void createBlocks(TiledMapTileLayer layer) {
 
         // tile size
@@ -155,7 +189,15 @@ public class GameStage extends Stage implements ContactListener {
             if (contact.getWorldManifold().getNormal().y == -1f)
                 runner.landed();
             System.out.println(contact.getWorldManifold().getNormal());
+            // contact between runner and deadzone
 
+        }
+        if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
+                (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
+            runner.landed();
+            //setUpWorld():
+//            runner.getUserData().setRunningPosition(new Vector2(Constants.RUNNER_X, Constants.RUNNER_Y));
+            System.out.println("perdu");
         }
     }
 
@@ -236,7 +278,7 @@ public class GameStage extends Stage implements ContactListener {
         camera.update();
 
         background.setSpeed(runner.getUserData().getLinearVelocity().x);
-        System.out.println(runner.getUserData().getLinearVelocity().x);
+       // System.out.println(runner.getUserData().getLinearVelocity().x);
         tmRenderer.setView(camera);
 //        TiledMapTileLayer layer;
 //        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");

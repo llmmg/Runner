@@ -3,9 +3,17 @@
  <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32" tilecount="3" columns="3">
   <image source="blocks.png" width="96" height="32"/>
  </tileset>
+ <tileset firstgid="4" name="deadzone" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="deadzone.png" width="34" height="34"/>
+ </tileset>
  <layer name="obstacle" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgYwEiAPwqwg9FwIw+Mhht5fh4s4UYve7HZQw276eF+WrmdGLuGSrgR605q2suIg01Luyk1g1x3kmsvI5UxLcxENptW7iYVAwC6FABq
+   eJxjYKAtYCTAHwXYwWi4kefnwRJu9LJ3KKcLbG6nh38Y6WQPNQCxYTTSw42YfE/vcGPEg9HVEFJPCSbWTfTAxITVKCAeAAD4bABZ
+  </data>
+ </layer>
+ <layer name="deadzone" width="78" height="8" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwSgYnIAFD6aXfYMRAAAzkAAx
   </data>
  </layer>
 </map>
