@@ -97,14 +97,14 @@ public class Runner extends GameActor {
         if(runnerDir==direction.LEFT)
         {
 //            spriteWidth=-Constants.RUNNER_WIDTH*Constants.SCALE;
-            batch.draw(currentAnimation.getKeyFrame(stateTime, true), (Constants.APP_WIDTH  + Constants.RUNNER_WIDTH* Constants.SCALE)/2, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
-                    -Constants.RUNNER_WIDTH*Constants.SCALE, Constants.RUNNER_HEIGHT * Constants.SCALE);
+            batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH/2  + Constants.RUNNER_WIDTH* Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+                    (-Constants.RUNNER_WIDTH*Constants.SCALE)*2, Constants.RUNNER_HEIGHT * Constants.SCALE);
 
         }else
         {
 //            spriteWidth=Constants.RUNNER_WIDTH*Constants.SCALE;
-            batch.draw(currentAnimation.getKeyFrame(stateTime, true), (Constants.APP_WIDTH  - Constants.RUNNER_WIDTH* Constants.SCALE)/2, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
-                    Constants.RUNNER_WIDTH*Constants.SCALE, Constants.RUNNER_HEIGHT * Constants.SCALE);
+            batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH/2  - Constants.RUNNER_WIDTH* Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+                    (Constants.RUNNER_WIDTH*Constants.SCALE)*2, Constants.RUNNER_HEIGHT * Constants.SCALE);
 
         }
 

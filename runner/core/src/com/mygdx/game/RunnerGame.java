@@ -23,13 +23,7 @@ public class RunnerGame extends Game {
 	public void render() {
 		super.render();
 		if(Gdx.input.isKeyPressed(Input.Keys.R))
-			try {
-				setScreen(getScreen().getClass().newInstance());
-			} catch(InstantiationException e) {
-				e.printStackTrace();
-			} catch(IllegalAccessException e) {
-				e.printStackTrace();
-			}
+            reset();
 
 	}
 
@@ -47,4 +41,14 @@ public class RunnerGame extends Game {
 	public void resume() {
 		super.resume();
 	}
+
+	public void reset(){
+        try {
+            setScreen(getScreen().getClass().newInstance());
+        } catch(InstantiationException e) {
+            e.printStackTrace();
+        } catch(IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 }
