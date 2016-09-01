@@ -2,16 +2,12 @@ package actors;
 
 import box2d.RunnerUserData;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import utils.Constants;
 
 /**
@@ -23,15 +19,28 @@ public class Runner extends GameActor {
     private boolean dodging;
     private boolean running;
 
+    public enum direction{
+        LEFT,
+        RIGHT
+    }
+
     private Animation walkAnimation;
-    private Animation idle;
+    private Animation idleAnimation;
+    private Animation jumpAnimation;
     private Texture spriteSheet;
     private TextureRegion[] walkFrames;
     private TextureRegion[] idleFrames;
-    private int imgWalk=12;
-    private int imgIdle=3;
+    private TextureRegion[] jumpFrames;
+
+    private int imgWalk = 12;
+    private int imgIdle = 3;
+    private int imgJump=3;
 
     float stateTime;
+
+    //runner direction
+    private direction runnerDir;
+
     public Runner(Body body) {
         super(body);
 //        TextureAtlas textureAtlas = new TextureAtlas(Constants.CHARACTERS_ATLAS_PATH);
@@ -44,18 +53,23 @@ public class Runner extends GameActor {
 //        runningAnimation = new Animation(0.1f, runningFrames);
 //        stateTime = 0f;
 
+
+
         walkFrames = new TextureRegion[imgWalk];
-        createAnimation(walkFrames,Constants.CHARACTER_RUN_PATH,imgWalk);
+        createAnimation(walkFrames, Constants.CHARACTER_RUN_PATH, imgWalk);
         walkAnimation = new Animation(0.05f, walkFrames);
 
-        idleFrames= new TextureRegion[imgIdle];
-        createAnimation(idleFrames,Constants.CHARACTER_IDLE_PATH,imgIdle);
-        idle= new Animation(0.1f,idleFrames);
+        idleFrames = new TextureRegion[imgIdle];
+        createAnimation(idleFrames, Constants.CHARACTER_IDLE_PATH, imgIdle);
+        idleAnimation = new Animation(0.1f, idleFrames);
+
+        jumpFrames = new TextureRegion[imgJump];
+        createAnimation(jumpFrames,Constants.CHARACTER_JUMP_PATH,imgJump);
+        jumpAnimation= new Animation(0.1f,jumpFrames);
 
     }
 
-    public void createAnimation( TextureRegion[] texReg,String name, int nbImg)
-    {
+    public void createAnimation(TextureRegion[] texReg, String name, int nbImg) {
         spriteSheet = new Texture(Gdx.files.internal(name));
         TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / nbImg, spriteSheet.getHeight());
         int index = 0;
@@ -64,19 +78,23 @@ public class Runner extends GameActor {
         }
         stateTime = 0f;
     }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         stateTime += Gdx.graphics.getDeltaTime();
-        if (running)
-        {
+
+        if (running && !jumping) {
             batch.draw(walkAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
                     Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
-        }
-        else {
-            batch.draw(idle.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+        } else if (jumping) {
+            batch.draw(jumpAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+                    Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
+        } else {
+            batch.draw(idleAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
                     Constants.RUNNER_X * Constants.SCALE, Constants.RUNNER_Y * Constants.SCALE);
         }
+
     }
 
     @Override
@@ -93,18 +111,20 @@ public class Runner extends GameActor {
     }
 
     public void runRight() {
-        if (!(dodging)) {
+        if (!dodging) {
             running = true;
             getUserData().setLinearVelocity(new Vector2(10f, body.getLinearVelocity().y));
 //            body.setLinearVelocity(10f,0);
+            runnerDir=direction.RIGHT;
         }
     }
 
     public void runLeft() {
-        if (!(dodging)) {
+        if (!dodging) {
             getUserData().setLinearVelocity(new Vector2(-10f, body.getLinearVelocity().y));
 //            body.setLinearVelocity(-10f,0);
             running = true;
+            runnerDir=direction.LEFT;
         }
     }
 
@@ -150,7 +170,8 @@ public class Runner extends GameActor {
     public boolean isDodging() {
         return dodging;
     }
-    public boolean isJumping(){
+
+    public boolean isJumping() {
         return jumping;
     }
 }

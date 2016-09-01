@@ -36,4 +36,5 @@ public class Constants {
 
     public static final String CHARACTER_RUN_PATH = "core//assets//sprites//runSprite.png";
     public static final String CHARACTER_IDLE_PATH = "core//assets//sprites//idle.png";
+    public static final String CHARACTER_JUMP_PATH= "core//assets//sprites//jump.png";
 }

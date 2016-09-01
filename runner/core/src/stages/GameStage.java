@@ -149,7 +149,7 @@ public class GameStage extends Stage implements ContactListener {
             if(contact.getWorldManifold().getNormal().y==-1f)
                 runner.landed();
             System.out.println(contact.getWorldManifold().getNormal());
-                System.out.println("down");
+
         }
     }
 
