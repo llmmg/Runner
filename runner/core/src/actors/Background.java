@@ -28,7 +28,11 @@ public class Background extends Actor {
 
     @Override
     public void act(float delta) {
+<<<<<<< HEAD
         //System.out.println("texture1:"+textureRegionBounds1.x+" texture2: " + textureRegionBounds2.x);
+=======
+//        System.out.println("texture1:"+textureRegionBounds1.x+" texture2: " + textureRegionBounds2.x);
+>>>>>>> 9ddeb044796f20326a21013c389976a22d1dc8f1
         if (leftBoundsReached(delta)) {
             resetBounds(false);
         } else if (rightBoundsReached(delta)) {
@@ -66,11 +70,9 @@ public class Background extends Actor {
 
     private void resetBounds(boolean right) {
         if (right) {
-            System.out.println("1");
             textureRegionBounds2 = textureRegionBounds1;
             textureRegionBounds1 = new Rectangle(-Constants.APP_WIDTH, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
         } else {
-            System.out.println("2");
             textureRegionBounds1 = textureRegionBounds2;
             textureRegionBounds2 = new Rectangle(Constants.APP_WIDTH, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
         }

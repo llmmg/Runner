@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -29,6 +30,12 @@ public class Runner extends GameActor {
     private Animation jumpAnimation;
     private Animation currentAnimation;
 
+    //cat sprite
+    private Animation runningAnimation;
+    private Animation idleAnimationCat;
+    private TextureRegion[] runningFrames;
+    private TextureRegion[] idleFramesCat;
+
     private Texture spriteSheet;
     private TextureRegion[] walkFrames;
     private TextureRegion[] idleFrames;
@@ -46,29 +53,42 @@ public class Runner extends GameActor {
 
     public Runner(Body body) {
         super(body);
-//        TextureAtlas textureAtlas = new TextureAtlas(Constants.CHARACTERS_ATLAS_PATH);
-//        System.out.println(Constants.RUNNER_RUNNING_REGION_NAMES.length);
-//        TextureRegion[] runningFrames = new TextureRegion[Constants.RUNNER_RUNNING_REGION_NAMES.length];
-//        for (int i = 0; i < Constants.RUNNER_RUNNING_REGION_NAMES.length; i++) {
-//            String path = Constants.RUNNER_RUNNING_REGION_NAMES[i];
+
+        TextureAtlas textureAtlas = new TextureAtlas(Constants.CAT_ATLAS_PATH);
+//        runningFrames = new TextureRegion[Constants.CAT_RUN_REGION_NAMES.length];
+//        for (int i = 0; i < Constants.CAT_RUN_REGION_NAMES.length; i++) {
+//            String path = Constants.CAT_RUN_REGION_NAMES[i];
 //            runningFrames[i] = textureAtlas.findRegion(path);
 //        }
 //        runningAnimation = new Animation(0.1f, runningFrames);
-//        stateTime = 0f;
+        runningAnimation= initAnimation(textureAtlas,runningFrames,Constants.CAT_RUN_REGION_NAMES,0.08f);
+        idleAnimationCat= initAnimation(textureAtlas,idleFramesCat,Constants.CAT_IDLE_REGION_NAMES,0.1f);
 
 
-        walkFrames = new TextureRegion[imgWalk];
-        createAnimation(walkFrames, Constants.CHARACTER_RUN_PATH, imgWalk);
-        walkAnimation = new Animation(0.05f, walkFrames);
 
-        idleFrames = new TextureRegion[imgIdle];
-        createAnimation(idleFrames, Constants.CHARACTER_IDLE_PATH, imgIdle);
-        idleAnimation = new Animation(0.1f, idleFrames);
+//        walkFrames = new TextureRegion[imgWalk];
+//        createAnimation(walkFrames, Constants.CHARACTER_RUN_PATH, imgWalk);
+//        walkAnimation = new Animation(0.05f, walkFrames);
+
+//        idleFrames = new TextureRegion[imgIdle];
+//        createAnimation(idleFrames, Constants.CHARACTER_IDLE_PATH, imgIdle);
+//        idleAnimation = new Animation(0.1f, idleFrames);
 
         jumpFrames = new TextureRegion[imgJump];
         createAnimation(jumpFrames, Constants.CHARACTER_JUMP_PATH, imgJump);
         jumpAnimation = new Animation(0.1f, jumpFrames);
 
+    }
+
+    //create sprite animation from picture and datasheet
+    private Animation initAnimation(TextureAtlas textureAtlas, TextureRegion[] frames, String[] regionsNames, float animationSpeed) {
+        frames = new TextureRegion[regionsNames.length];
+        for (int i = 0; i < regionsNames.length; i++) {
+            String path = regionsNames[i];
+            frames[i] = textureAtlas.findRegion(path);
+        }
+
+        return new Animation(animationSpeed, frames);
     }
 
     public void createAnimation(TextureRegion[] texReg, String name, int nbImg) {
@@ -87,24 +107,22 @@ public class Runner extends GameActor {
         stateTime += Gdx.graphics.getDeltaTime();
 
         if (running && !jumping) {
-            currentAnimation = walkAnimation;
+//            currentAnimation = walkAnimation;
+            currentAnimation = runningAnimation;
         } else if (jumping) {
             currentAnimation = jumpAnimation;
         } else {
-            currentAnimation = idleAnimation;
+//            currentAnimation = idleAnimation;
+            currentAnimation=idleAnimationCat;
         }
 
-        if(runnerDir==direction.LEFT)
-        {
-//            spriteWidth=-Constants.RUNNER_WIDTH*Constants.SCALE;
-            batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH/2  + Constants.RUNNER_WIDTH* Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
-                    (-Constants.RUNNER_WIDTH*Constants.SCALE)*2, Constants.RUNNER_HEIGHT * Constants.SCALE);
+        if (runnerDir == direction.LEFT) {
+            batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 + Constants.RUNNER_WIDTH * Constants.SCALE / 2, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+                    (-Constants.RUNNER_WIDTH * Constants.SCALE), Constants.RUNNER_HEIGHT * Constants.SCALE);
 
-        }else
-        {
-//            spriteWidth=Constants.RUNNER_WIDTH*Constants.SCALE;
-            batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH/2  - Constants.RUNNER_WIDTH* Constants.SCALE, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
-                    (Constants.RUNNER_WIDTH*Constants.SCALE)*2, Constants.RUNNER_HEIGHT * Constants.SCALE);
+        } else {
+            batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE / 2, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
+                    (Constants.RUNNER_WIDTH * Constants.SCALE), Constants.RUNNER_HEIGHT * Constants.SCALE);
 
         }
 
