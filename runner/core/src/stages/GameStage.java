@@ -11,11 +11,16 @@ import box2d.GroundUserData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.math.Vector2;
@@ -26,6 +31,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import utils.BodyUtils;
 import utils.Constants;
@@ -63,6 +69,7 @@ public class GameStage extends Stage implements ContactListener {
     private int tileSize;
     private OrthogonalTiledMapRenderer tmRenderer;
 
+    private ButtonPause PauseButton;
     private Vector3 touchPoint;
 
     public GameStage() {
@@ -90,6 +97,7 @@ public class GameStage extends Stage implements ContactListener {
         //setUpGround();
         setUpBackground();
         setUpRunner();
+        setUpPause();
         createWalls();
     }
 
@@ -251,9 +259,18 @@ public class GameStage extends Stage implements ContactListener {
         camera.update();
     }
 
+    private void setUpPause() {
+        PauseButton = new ButtonPause();
+        addActor(PauseButton.createButton());
+
+
+    }
+
     public float scale(float valueToBeScaled) {
         return valueToBeScaled / Constants.SCALE;
     }
+
+
 
     @Override
     public void act(float delta) {
@@ -339,14 +356,6 @@ public class GameStage extends Stage implements ContactListener {
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
-        //actual coordinates
-        translateScreenToWorldCoordinates(x, y);
-        System.out.println("test");
-        if (rightSideTouched(touchPoint.x, touchPoint.y)) {
-            runner.jump();
-        } else if (leftSideTouched(touchPoint.x, touchPoint.y)) {
-            runner.dodge();
-        }
 
         return super.touchDown(x, y, pointer, button);
     }
