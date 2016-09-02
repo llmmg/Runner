@@ -107,12 +107,16 @@ public class Runner extends GameActor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         stateTime += Gdx.graphics.getDeltaTime();
-
         if (running && !jumping) {
             currentAnimation = runningAnimation;
         } else if (jumping) {
             currentAnimation = jumpAnimation;
-        } else {
+        } else if (dodging)
+        {
+            currentAnimation=slideAnimation;
+        }
+        else
+        {
             currentAnimation=idleAnimationCat;
         }
 
@@ -142,6 +146,8 @@ public class Runner extends GameActor {
         getUserData().setRunningPosition(body.getPosition());
         if (running)
             body.setLinearVelocity(getUserData().getLinearVelocity().x, body.getLinearVelocity().y);
+        if(dodging)
+            getUserData().setLinearVelocity(body.getLinearVelocity());
     }
 
     public void runRight() {
@@ -164,10 +170,11 @@ public class Runner extends GameActor {
 
     public void stopRunning() {
         running = false;
-        if (!dodging)
+        if(!dodging)
             body.setLinearVelocity(0, body.getLinearVelocity().y);
-        //set dataSpeed to 0 when runner stop running
+            //set dataSpeed to 0 when runner stop running
         getUserData().setLinearVelocity(body.getLinearVelocity());
+        System.out.println("stop running");
     }
 
     public void jump() {
@@ -184,7 +191,7 @@ public class Runner extends GameActor {
 
     public void dodge() {
         if (!jumping) {
-            body.setTransform(body.getWorldCenter(), getUserData().getDodgeAngle());
+//            body.setTransform(body.getWorldCenter(), getUserData().getDodgeAngle());
             //-------
             //test
 //            if(running)
@@ -194,13 +201,16 @@ public class Runner extends GameActor {
 //            }
             //endtest
             //-------
+            System.out.println("dodge");
             dodging = true;
+            getUserData().setLinearVelocity(new Vector2(0f,body.getLinearVelocity().y));
         }
     }
 
     public void stopDodge() {
         dodging = false;
         body.setTransform(body.getWorldCenter(), 0f);
+        System.out.println("stopDodge");
     }
 
     public boolean isDodging() {

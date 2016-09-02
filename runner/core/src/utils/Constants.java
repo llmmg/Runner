@@ -45,5 +45,4 @@ public class Constants {
     public static final String[] CAT_JUMP_REGION_NAMES = new String[]{"Jump (1)", "Jump (2)", "Jump (3)", "Jump (4)", "Jump (5)", "Jump (6)", "Jump (7)", "Jump (8)"};
     public static final String[] CAT_FALL_REGION_NAMES = new String[]{"Fall (1)", "Fall (2)", "Fall (3)", "Fall (4)", "Fall (5)", "Fall (6)", "Fall (7)", "Fall (8)"};
     public static final String[] CAT_SLIDE_REGION_NAMES = new String[]{"Slide (1)", "Slide (2)", "Slide (3)", "Slide (4)", "Slide (5)", "Slide (6)", "Slide (7)", "Slide (8)", "Slide (9)", "Slide (10)"};
-
 }

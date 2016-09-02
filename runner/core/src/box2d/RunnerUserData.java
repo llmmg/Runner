@@ -17,15 +17,14 @@ public class RunnerUserData extends UserData {
         super();
         jumpingLinearImpulse = Constants.RUNNER_JUMPING_LINEAR_IMPULSE;
         userDataType = userDataType.RUNNER;
-        linearVelocity=Constants.RUNNER_VELOCITY;
+        linearVelocity = Constants.RUNNER_VELOCITY;
     }
 
-    public void setLinearVelocity(Vector2 linearVelocity)
-    {
-        this.linearVelocity=linearVelocity;
+    public void setLinearVelocity(Vector2 linearVelocity) {
+        this.linearVelocity = linearVelocity;
     }
-    public Vector2 getLinearVelocity()
-    {
+
+    public Vector2 getLinearVelocity() {
         return linearVelocity;
     }
 
@@ -36,16 +35,18 @@ public class RunnerUserData extends UserData {
     public void setJumpingLinearImpulse(Vector2 jumpingLinearImpulse) {
         this.jumpingLinearImpulse = jumpingLinearImpulse;
     }
-    public float getDodgeAngle(){
+
+    public float getDodgeAngle() {
         //radians
-        return (float) (-90f*(Math.PI/180f));
+        return (float) (-90f * (Math.PI / 180f));
     }
+
     public Vector2 getRunningPosition() {
         return runningPosition;
     }
-    public void setRunningPosition(Vector2 runningPosition)
-    {
-        this.runningPosition=runningPosition;
+
+    public void setRunningPosition(Vector2 runningPosition) {
+        this.runningPosition = runningPosition;
     }
 //    public Vector2 getDodgePosition() {
 //        return dodgePosition;
