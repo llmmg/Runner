@@ -116,9 +116,10 @@ public class GameStage extends Stage implements ContactListener {
         layer = (TiledMapTileLayer) tileMap.getLayers().get("obstacle");
         createBlocks(layer);
 
-        layer =(TiledMapTileLayer) tileMap.getLayers().get("deadzone");
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("deadzone");
         createDeadZone(layer);
     }
+
     private void createDeadZone(TiledMapTileLayer layer) {
         // go through all cells in layer
         for (int row = 0; row < layer.getHeight(); row++) {
@@ -149,6 +150,7 @@ public class GameStage extends Stage implements ContactListener {
             }
         }
     }
+
     private void createBlocks(TiledMapTileLayer layer) {
 
         // tile size
@@ -193,13 +195,10 @@ public class GameStage extends Stage implements ContactListener {
         //if the runner touch the ground
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsGround(b)) ||
                 (BodyUtils.bodyIsGround(a) && BodyUtils.bodyIsRunner(b))) {
-//            if(a.getLinearVelocity().y==0 && b.getLinearVelocity().y==0)
-            if (contact.getWorldManifold().getNormal().x == 0f) //or y==-1f
+            if (contact.getWorldManifold().getNormal().x == 0)
                 runner.landed();
-            System.out.println(contact.getWorldManifold().getNormal());
-            // contact between runner and deadzone
-
-        }
+//            System.out.println(contact.getWorldManifold().getNormal());
+           }// contact between runner and deadzone
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
                 (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
             runner.landed();
@@ -271,7 +270,6 @@ public class GameStage extends Stage implements ContactListener {
     }
 
 
-
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -290,12 +288,11 @@ public class GameStage extends Stage implements ContactListener {
     @Override
     public void draw() {
         super.draw();
-
         camera.position.set(runner.getUserData().getRunningPosition().x, runner.getUserData().getRunningPosition().y, 0f);
         camera.update();
 
         background.setSpeed(runner.getUserData().getLinearVelocity().x);
-       // System.out.println(runner.getUserData().getLinearVelocity().x);
+        // System.out.println(runner.getUserData().getLinearVelocity().x);
         tmRenderer.setView(camera);
 //        TiledMapTileLayer layer;
 //        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");

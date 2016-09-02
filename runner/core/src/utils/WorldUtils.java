@@ -64,17 +64,17 @@ public class WorldUtils {
         chainShape.createLoop(vects);
 
         //circle
-        CircleShape circleShape= new CircleShape();
-        circleShape.setPosition(new Vector2(0,-Constants.RUNNER_HEIGHT/4));
-        circleShape.setRadius(Constants.RUNNER_WIDTH/2);
+        CircleShape circleShape = new CircleShape();
+        circleShape.setPosition(new Vector2(0, -Constants.RUNNER_HEIGHT / 4));
+        circleShape.setRadius(Constants.RUNNER_WIDTH / 2);
 //        PolygonShape shape = new PolygonShape();
 //        shape.setAsBox(Constants.RUNNER_WIDTH / 2, Constants.RUNNER_HEIGHT / 2);
 
         Body body = world.createBody(bodyDef);
         body.setGravityScale(Constants.RUNNER_GRAVITY_SCALE);
 //        body.createFixture(shape, Constants.RUNNER_DENSITY);
+        body.createFixture(circleShape, 0);
         body.createFixture(chainShape, Constants.RUNNER_DENSITY);
-        body.createFixture(circleShape,0);
         body.resetMassData();
         body.setUserData(new RunnerUserData());
 
