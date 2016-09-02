@@ -28,7 +28,7 @@ public class Background extends Actor {
 
     @Override
     public void act(float delta) {
-        System.out.println("texture1:"+textureRegionBounds1.x+" texture2: " + textureRegionBounds2.x);
+        //System.out.println("texture1:"+textureRegionBounds1.x+" texture2: " + textureRegionBounds2.x);
         if (leftBoundsReached(delta)) {
             resetBounds(false);
         } else if (rightBoundsReached(delta)) {
