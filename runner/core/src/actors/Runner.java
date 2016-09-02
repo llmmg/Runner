@@ -25,21 +25,27 @@ public class Runner extends GameActor {
         RIGHT
     }
 
-    private Animation walkAnimation;
-    private Animation idleAnimation;
-    private Animation jumpAnimation;
+//    private Animation walkAnimation;
+//    private Animation idleAnimation;
+//    private Animation jumpAnimation;
     private Animation currentAnimation;
 
     //cat sprite
     private Animation runningAnimation;
     private Animation idleAnimationCat;
+    private Animation slideAnimation;
+    private Animation jumpAnimation;
+    private Animation fallAnimation;
     private TextureRegion[] runningFrames;
     private TextureRegion[] idleFramesCat;
+    private TextureRegion[] slideFrames;
+    private TextureRegion[] jumpFrames;
+    private TextureRegion[] fallFrames;
 
     private Texture spriteSheet;
-    private TextureRegion[] walkFrames;
-    private TextureRegion[] idleFrames;
-    private TextureRegion[] jumpFrames;
+//    private TextureRegion[] walkFrames;
+//    private TextureRegion[] idleFrames;
+//    private TextureRegion[] jumpFrames;
 
     private int imgWalk = 12;
     private int imgIdle = 3;
@@ -55,15 +61,11 @@ public class Runner extends GameActor {
         super(body);
 
         TextureAtlas textureAtlas = new TextureAtlas(Constants.CAT_ATLAS_PATH);
-//        runningFrames = new TextureRegion[Constants.CAT_RUN_REGION_NAMES.length];
-//        for (int i = 0; i < Constants.CAT_RUN_REGION_NAMES.length; i++) {
-//            String path = Constants.CAT_RUN_REGION_NAMES[i];
-//            runningFrames[i] = textureAtlas.findRegion(path);
-//        }
-//        runningAnimation = new Animation(0.1f, runningFrames);
         runningAnimation= initAnimation(textureAtlas,runningFrames,Constants.CAT_RUN_REGION_NAMES,0.08f);
         idleAnimationCat= initAnimation(textureAtlas,idleFramesCat,Constants.CAT_IDLE_REGION_NAMES,0.1f);
-
+        jumpAnimation= initAnimation(textureAtlas,jumpFrames,Constants.CAT_JUMP_REGION_NAMES,0.1f);
+        fallAnimation= initAnimation(textureAtlas,fallFrames,Constants.CAT_FALL_REGION_NAMES,0.1f);
+        slideAnimation= initAnimation(textureAtlas,slideFrames,Constants.CAT_SLIDE_REGION_NAMES,0.1f);
 
 
 //        walkFrames = new TextureRegion[imgWalk];
@@ -74,9 +76,9 @@ public class Runner extends GameActor {
 //        createAnimation(idleFrames, Constants.CHARACTER_IDLE_PATH, imgIdle);
 //        idleAnimation = new Animation(0.1f, idleFrames);
 
-        jumpFrames = new TextureRegion[imgJump];
-        createAnimation(jumpFrames, Constants.CHARACTER_JUMP_PATH, imgJump);
-        jumpAnimation = new Animation(0.1f, jumpFrames);
+//        jumpFrames = new TextureRegion[imgJump];
+//        createAnimation(jumpFrames, Constants.CHARACTER_JUMP_PATH, imgJump);
+//        jumpAnimation = new Animation(0.1f, jumpFrames);
 
     }
 
@@ -107,12 +109,10 @@ public class Runner extends GameActor {
         stateTime += Gdx.graphics.getDeltaTime();
 
         if (running && !jumping) {
-//            currentAnimation = walkAnimation;
             currentAnimation = runningAnimation;
         } else if (jumping) {
             currentAnimation = jumpAnimation;
         } else {
-//            currentAnimation = idleAnimation;
             currentAnimation=idleAnimationCat;
         }
 
