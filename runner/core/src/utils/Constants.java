@@ -24,18 +24,23 @@ public class Constants {
     public static final float RUNNER_HEIGHT = 2f;
     public static final float RUNNER_DENSITY = 0.5f;
 
-    public static final  float RUNNER_GRAVITY_SCALE=3f; //gravity is amplified for a best gameplay
-    public static final Vector2 RUNNER_JUMPING_LINEAR_IMPULSE= new Vector2(0,13f);
+    public static final float RUNNER_GRAVITY_SCALE = 3f; //gravity is amplified for a best gameplay
+    public static final Vector2 RUNNER_JUMPING_LINEAR_IMPULSE = new Vector2(0, 13f);
 
-    public static final float RUNNER_DODGE_X =2f;
-    public static final float RUNNER_DODGE_Y=1.5f;
+    public static final float RUNNER_DODGE_X = 2f;
+    public static final float RUNNER_DODGE_Y = 1.5f;
 
     //useful for an infinite runner but not for our platformer
-    public static final Vector2 RUNNER_VELOCITY= new Vector2(0,0);
+    public static final Vector2 RUNNER_VELOCITY = new Vector2(0, 0);
 
-    public static final String BACKGROUND_IMAGE_PATH= "core//assets//background.png";
+    public static final String BACKGROUND_IMAGE_PATH = "core//assets//background.png";
 
     public static final String CHARACTER_RUN_PATH = "core//assets//sprites//runSprite.png";
     public static final String CHARACTER_IDLE_PATH = "core//assets//sprites//idle.png";
-    public static final String CHARACTER_JUMP_PATH= "core//assets//sprites//jump.png";
+    public static final String CHARACTER_JUMP_PATH = "core//assets//sprites//jump.png";
+
+    public static final String CAT_ATLAS_PATH = "core//assets//sprites//cat//cat.txt";
+    public static final String[] CAT_RUN_REGION_NAMES = new String[]{"Run (1)", "Run (2)", "Run (3)", "Run (4)", "Run (5)", "Run (6)", "Run (7)", "Run (8)"};
+    public static final String[] CAT_IDLE_REGION_NAMES = new String[]{"Idle (1)", "Idle (2)", "Idle (3)", "Idle (4)", "Idle (5)", "Idle (6)", "Idle (7)", "Idle (8)", "Idle (9)", "Idle (10)"};
+
 }
