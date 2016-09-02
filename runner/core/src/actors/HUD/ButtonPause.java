@@ -1,5 +1,6 @@
 package actors.HUD;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.mygdx.game.RunnerGame;
 import utils.Constants;
 
 /**
@@ -20,8 +22,10 @@ public class ButtonPause extends Button{
     private TextButton button;
     private float buttonHeight=10f;
     private float buttonWidth=10f;
+    private RunnerGame Game;
 
     public ButtonPause() {
+        Game= RunnerGame.getINSTANCE();
         createButton();
     }
     public TextButton createButton(){
@@ -33,6 +37,7 @@ public class ButtonPause extends Button{
         button.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
+                Game.pause();
                 System.out.println("Button Pressed");
             }
         });

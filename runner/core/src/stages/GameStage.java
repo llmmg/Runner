@@ -32,6 +32,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.mygdx.game.RunnerGame;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import utils.BodyUtils;
 import utils.Constants;
@@ -70,11 +71,13 @@ public class GameStage extends Stage implements ContactListener {
     private OrthogonalTiledMapRenderer tmRenderer;
 
     private ButtonPause PauseButton;
+    private RunnerGame Game;
     private Vector3 touchPoint;
 
     public GameStage() {
         super(new ScalingViewport(Scaling.stretch, VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
                 new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)));
+        Game= RunnerGame.getINSTANCE();
         setUpWorld();
         setupCamera();
         setUpTouchControlAreas();
@@ -203,6 +206,7 @@ public class GameStage extends Stage implements ContactListener {
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
                 (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
             runner.landed();
+            Game.reset();
             //setUpWorld():
 //            runner.getUserData().setRunningPosition(new Vector2(Constants.RUNNER_X, Constants.RUNNER_Y));
             System.out.println("perdu");
@@ -322,23 +326,24 @@ public class GameStage extends Stage implements ContactListener {
 //        {
 //            runner.runRight();
 //        }
-
-        switch (keycode) {
-            case Input.Keys.UP:
-                runner.jump();
-                break;
-            case Input.Keys.DOWN:
-                runner.dodge();
-                runner.stopRunning();
-                break;
-            case Input.Keys.RIGHT:
-                //camera.position.x+=1f;
-                runner.runRight();
-                break;
-            case Input.Keys.LEFT:
-                //camera.position.x-=1f;
-                runner.runLeft();
-                break;
+        if(!Game.getState()) {
+            switch (keycode) {
+                case Input.Keys.UP:
+                    runner.jump();
+                    break;
+                case Input.Keys.DOWN:
+                    runner.dodge();
+                    runner.stopRunning();
+                    break;
+                case Input.Keys.RIGHT:
+                    //camera.position.x+=1f;
+                    runner.runRight();
+                    break;
+                case Input.Keys.LEFT:
+                    //camera.position.x-=1f;
+                    runner.runLeft();
+                    break;
+            }
         }
         return super.keyDown(keycode);
     }
