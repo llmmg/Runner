@@ -19,6 +19,7 @@ public class Runner extends GameActor {
     private boolean jumping;
     private boolean dodging;
     private boolean running;
+    private boolean falling;
 
     public enum direction {
         LEFT,
@@ -109,9 +110,13 @@ public class Runner extends GameActor {
         stateTime += Gdx.graphics.getDeltaTime();
         if (running && !jumping) {
             currentAnimation = runningAnimation;
-        } else if (jumping) {
+        }else if(falling) {
+            System.out.println("fall anim");
+            currentAnimation = fallAnimation;
+        }else if (jumping) {
+            System.out.println("jump anim");
             currentAnimation = jumpAnimation;
-        } else if (dodging)
+        }else if (dodging)
         {
             currentAnimation=slideAnimation;
         }
@@ -148,6 +153,8 @@ public class Runner extends GameActor {
             body.setLinearVelocity(getUserData().getLinearVelocity().x, body.getLinearVelocity().y);
         if(dodging)
             getUserData().setLinearVelocity(body.getLinearVelocity());
+
+        falling=body.getLinearVelocity().y<0;
     }
 
     public void runRight() {
@@ -170,9 +177,10 @@ public class Runner extends GameActor {
 
     public void stopRunning() {
         running = false;
-        if(!dodging)
+        if(!dodging){
             body.setLinearVelocity(0, body.getLinearVelocity().y);
-            //set dataSpeed to 0 when runner stop running
+        }
+        //set dataSpeed to 0 when runner stop running
         getUserData().setLinearVelocity(body.getLinearVelocity());
         System.out.println("stop running");
     }

@@ -292,6 +292,7 @@ public class GameStage extends Stage implements ContactListener {
     @Override
     public void draw() {
         super.draw();
+//        System.out.println(runner.getUserData().getLinearVelocity());
         camera.position.set(runner.getUserData().getRunningPosition().x, runner.getUserData().getRunningPosition().y, 0f);
         camera.update();
 
