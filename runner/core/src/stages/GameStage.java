@@ -11,16 +11,11 @@ import box2d.GroundUserData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.math.Vector2;
@@ -31,9 +26,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.mygdx.game.RunnerGame;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import utils.BodyUtils;
 import utils.Constants;
 import utils.WorldUtils;
@@ -70,14 +63,15 @@ public class GameStage extends Stage implements ContactListener {
     private int tileSize;
     private OrthogonalTiledMapRenderer tmRenderer;
 
-    private ButtonPause PauseButton;
-    private RunnerGame Game;
+    private ButtonPause pauseButton;
+    private TextScore textScore;
+    private RunnerGame game;
     private Vector3 touchPoint;
 
     public GameStage() {
         super(new ScalingViewport(Scaling.stretch, VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
                 new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)));
-        Game= RunnerGame.getINSTANCE();
+        game = RunnerGame.getINSTANCE();
         setUpWorld();
         setupCamera();
         setUpTouchControlAreas();
@@ -101,6 +95,7 @@ public class GameStage extends Stage implements ContactListener {
         setUpBackground();
         setUpRunner();
         setUpPause();
+        setUpScore();
         createWalls();
     }
 
@@ -205,7 +200,7 @@ public class GameStage extends Stage implements ContactListener {
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
                 (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
             runner.landed();
-            Game.reset();
+            game.reset();
             //setUpWorld():
 //            runner.getUserData().setRunningPosition(new Vector2(Constants.RUNNER_X, Constants.RUNNER_Y));
             System.out.println("perdu");
@@ -263,10 +258,12 @@ public class GameStage extends Stage implements ContactListener {
     }
 
     private void setUpPause() {
-        PauseButton = new ButtonPause();
-        addActor(PauseButton.createButton());
-
-
+        pauseButton = new ButtonPause();
+        addActor(pauseButton.getButtonPause());
+    }
+    private void setUpScore(){
+        textScore = new TextScore();
+        addActor(textScore.getTextScore());
     }
 
     public float scale(float valueToBeScaled) {
@@ -276,7 +273,7 @@ public class GameStage extends Stage implements ContactListener {
 
     @Override
     public void act(float delta) {
-        if(!Game.getState()) {
+        if(!game.getState()) {
             delta = Gdx.graphics.getRawDeltaTime();
         }
         else{
@@ -301,7 +298,7 @@ public class GameStage extends Stage implements ContactListener {
 //        System.out.println(runner.getUserData().getLinearVelocity());
         camera.position.set(runner.getUserData().getRunningPosition().x, runner.getUserData().getRunningPosition().y, 0f);
         camera.update();
-
+        textScore.update();
         background.setSpeed(runner.getUserData().getLinearVelocity().x);
         // System.out.println(runner.getUserData().getLinearVelocity().x);
         tmRenderer.setView(camera);
@@ -330,7 +327,7 @@ public class GameStage extends Stage implements ContactListener {
 //        {
 //            runner.runRight();
 //        }
-        if(!Game.getState()) {
+        if(!game.getState()) {
             switch (keycode) {
                 case Input.Keys.UP:
                     runner.jump();

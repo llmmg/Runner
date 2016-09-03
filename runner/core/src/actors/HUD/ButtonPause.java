@@ -22,13 +22,10 @@ public class ButtonPause extends Button{
     private TextButton button;
     private float buttonHeight=10f;
     private float buttonWidth=10f;
-    private RunnerGame Game;
+    private RunnerGame game;
 
     public ButtonPause() {
-        Game= RunnerGame.getINSTANCE();
-        createButton();
-    }
-    public TextButton createButton(){
+        game= RunnerGame.getINSTANCE();
         font = new BitmapFont();
         textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = font;
@@ -37,10 +34,13 @@ public class ButtonPause extends Button{
         button.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                Game.setPause();
+                game.setPause();
                 System.out.println("Button Pressed");
             }
         });
+        //createButton();
+    }
+    public TextButton getButtonPause(){
         return button;
     }
 }
