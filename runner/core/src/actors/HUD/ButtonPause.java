@@ -37,7 +37,7 @@ public class ButtonPause extends Button{
         button.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                Game.pause();
+                Game.setPause();
                 System.out.println("Button Pressed");
             }
         });

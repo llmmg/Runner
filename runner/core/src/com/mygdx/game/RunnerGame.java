@@ -37,14 +37,7 @@ public class RunnerGame extends Game {
 		if (Gdx.input.isKeyPressed(Input.Keys.R))
 			reset();
 		if(Gdx.input.isKeyPressed(Input.Keys.P)){
-            Gdx.graphics.setContinuousRendering(false);
-            isPause=true;
-            //Gdx.graphics.requestRendering();
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.O)){
-            //Gdx.graphics.requestRendering();
-            Gdx.graphics.setContinuousRendering(true);
-            isPause=false;
+			setPause();
 		}
         super.render();
 	}
@@ -77,4 +70,14 @@ public class RunnerGame extends Game {
     {
         return isPause;
     }
+    public void setPause(){
+		if(isPause){
+			this.resume();
+			isPause=false;
+		}
+		else {
+			this.pause();
+			isPause = true;
+		}
+	}
 }
