@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.mygdx.game.RunnerGame;
 import utils.Constants;
 
 /**
@@ -19,8 +20,9 @@ public class TextScore extends Actor {
     private TextButton.TextButtonStyle textButtonStyle;
     private BitmapFont font;
     private TextButton time;
+    private RunnerGame game;
     public TextScore(){
-
+        game= RunnerGame.getINSTANCE();
         totalTime=0;
         font = new BitmapFont();
         textButtonStyle = new TextButton.TextButtonStyle();
@@ -33,7 +35,12 @@ public class TextScore extends Actor {
         return  time;
     }
     public void update(){
-        totalTime += Gdx.graphics.getDeltaTime();
+        if(!game.getState()) {
+            totalTime += Gdx.graphics.getRawDeltaTime();
+        }
+        else{
+            totalTime+=0;
+        }
         minutes = (float)Math.floor(totalTime / 60.0f);
         seconds = totalTime - minutes * 60.0f;
         time.setText(String.format("%.0fm%.0fs", minutes, seconds));
