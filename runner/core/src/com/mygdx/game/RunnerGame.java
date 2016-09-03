@@ -34,9 +34,9 @@ public class RunnerGame extends Game {
 
 	@Override
 	public void render() {
-		if (Gdx.input.isKeyPressed(Input.Keys.R))
+		if (Gdx.input.isKeyJustPressed(Input.Keys.R))
 			reset();
-		if(Gdx.input.isKeyPressed(Input.Keys.P)){
+		if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
 			setPause();
 		}
         super.render();
