@@ -276,6 +276,12 @@ public class GameStage extends Stage implements ContactListener {
 
     @Override
     public void act(float delta) {
+        if(!Game.getState()) {
+            delta = Gdx.graphics.getRawDeltaTime();
+        }
+        else{
+            delta=0;
+        }
         super.act(delta);
 
         // Fixed timestep
