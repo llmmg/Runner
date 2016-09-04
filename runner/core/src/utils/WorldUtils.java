@@ -67,6 +67,7 @@ public class WorldUtils {
         CircleShape circleShape = new CircleShape();
         circleShape.setPosition(new Vector2(0, -Constants.RUNNER_HEIGHT / 4));
         circleShape.setRadius(Constants.RUNNER_WIDTH / 2);
+
 //        PolygonShape shape = new PolygonShape();
 //        shape.setAsBox(Constants.RUNNER_WIDTH / 2, Constants.RUNNER_HEIGHT / 2);
 

@@ -193,10 +193,13 @@ public class GameStage extends Stage implements ContactListener {
         //if the runner touch the ground
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsGround(b)) ||
                 (BodyUtils.bodyIsGround(a) && BodyUtils.bodyIsRunner(b))) {
-            if (contact.getWorldManifold().getNormal().x == 0)
+
+            if (contact.getWorldManifold().getNormal().x == 0 && !runner.isRising() ){
                 runner.landed();
+            }
 //            System.out.println(contact.getWorldManifold().getNormal());
-           }// contact between runner and deadzone
+            System.out.println(contact.getTangentSpeed());
+        }// contact between runner and deadzone
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
                 (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
             runner.landed();
@@ -261,7 +264,8 @@ public class GameStage extends Stage implements ContactListener {
         pauseButton = new ButtonPause();
         addActor(pauseButton.getButtonPause());
     }
-    private void setUpScore(){
+
+    private void setUpScore() {
         textScore = new TextScore();
         addActor(textScore.getTextScore());
     }
@@ -273,11 +277,10 @@ public class GameStage extends Stage implements ContactListener {
 
     @Override
     public void act(float delta) {
-        if(!game.getState()) {
+        if (!game.getState()) {
             delta = Gdx.graphics.getRawDeltaTime();
-        }
-        else{
-            delta=0;
+        } else {
+            delta = 0;
         }
         super.act(delta);
 
@@ -327,7 +330,7 @@ public class GameStage extends Stage implements ContactListener {
 //        {
 //            runner.runRight();
 //        }
-        if(!game.getState()) {
+        if (!game.getState()) {
             switch (keycode) {
                 case Input.Keys.UP:
                     runner.jump();

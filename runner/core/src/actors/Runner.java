@@ -20,13 +20,14 @@ public class Runner extends GameActor {
     private boolean dodging;
     private boolean running;
     private boolean falling;
+    private boolean rising; //used to know when the contact(collision) has to be ignored for landing
 
     public enum direction {
         LEFT,
         RIGHT
     }
 
-//    private Animation walkAnimation;
+    //    private Animation walkAnimation;
 //    private Animation idleAnimation;
 //    private Animation jumpAnimation;
     private Animation currentAnimation;
@@ -62,11 +63,11 @@ public class Runner extends GameActor {
         super(body);
 
         TextureAtlas textureAtlas = new TextureAtlas(Constants.CAT_ATLAS_PATH);
-        runningAnimation= initAnimation(textureAtlas,runningFrames,Constants.CAT_RUN_REGION_NAMES,0.08f);
-        idleAnimationCat= initAnimation(textureAtlas,idleFramesCat,Constants.CAT_IDLE_REGION_NAMES,0.1f);
-        jumpAnimation= initAnimation(textureAtlas,jumpFrames,Constants.CAT_JUMP_REGION_NAMES,0.1f);
-        fallAnimation= initAnimation(textureAtlas,fallFrames,Constants.CAT_FALL_REGION_NAMES,0.1f);
-        slideAnimation= initAnimation(textureAtlas,slideFrames,Constants.CAT_SLIDE_REGION_NAMES,0.1f);
+        runningAnimation = initAnimation(textureAtlas, runningFrames, Constants.CAT_RUN_REGION_NAMES, 0.08f);
+        idleAnimationCat = initAnimation(textureAtlas, idleFramesCat, Constants.CAT_IDLE_REGION_NAMES, 0.1f);
+        jumpAnimation = initAnimation(textureAtlas, jumpFrames, Constants.CAT_JUMP_REGION_NAMES, 0.1f);
+        fallAnimation = initAnimation(textureAtlas, fallFrames, Constants.CAT_FALL_REGION_NAMES, 0.1f);
+        slideAnimation = initAnimation(textureAtlas, slideFrames, Constants.CAT_SLIDE_REGION_NAMES, 0.1f);
 
 
 //        walkFrames = new TextureRegion[imgWalk];
@@ -104,25 +105,25 @@ public class Runner extends GameActor {
         stateTime = 0f;
     }
 
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         stateTime += Gdx.graphics.getDeltaTime();
         if (running && !jumping) {
             currentAnimation = runningAnimation;
-        }else if(falling) {
-            System.out.println("fall anim");
+        } else if (falling) {
+//            System.out.println("fall anim");
             currentAnimation = fallAnimation;
-        }else if (jumping) {
-            System.out.println("jump anim");
+            rising = false;
+        } else if (jumping) {
+//            System.out.println("jump anim");
             currentAnimation = jumpAnimation;
-        }else if (dodging)
-        {
-            currentAnimation=slideAnimation;
-        }
-        else
-        {
-            currentAnimation=idleAnimationCat;
+            rising = true;
+        } else if (dodging) {
+            currentAnimation = slideAnimation;
+        } else {
+            currentAnimation = idleAnimationCat;
         }
 
         if (runnerDir == direction.LEFT) {
@@ -151,10 +152,10 @@ public class Runner extends GameActor {
         getUserData().setRunningPosition(body.getPosition());
         if (running)
             body.setLinearVelocity(getUserData().getLinearVelocity().x, body.getLinearVelocity().y);
-        if(dodging)
+        if (dodging)
             getUserData().setLinearVelocity(body.getLinearVelocity());
 
-        falling=body.getLinearVelocity().y<0;
+        falling = body.getLinearVelocity().y < 0;
     }
 
     public void runRight() {
@@ -177,7 +178,7 @@ public class Runner extends GameActor {
 
     public void stopRunning() {
         running = false;
-        if(!dodging){
+        if (!dodging) {
             body.setLinearVelocity(0, body.getLinearVelocity().y);
         }
         //set dataSpeed to 0 when runner stop running
@@ -186,7 +187,7 @@ public class Runner extends GameActor {
     }
 
     public void jump() {
-        if (!(jumping || dodging)) {
+        if (!(jumping || dodging)&&!falling) {
             System.out.println("jump");
             body.applyLinearImpulse(getUserData().getJumpingLinearImpulse(), body.getWorldCenter(), true);
             jumping = true;
@@ -211,7 +212,7 @@ public class Runner extends GameActor {
             //-------
             System.out.println("dodge");
             dodging = true;
-            getUserData().setLinearVelocity(new Vector2(0f,body.getLinearVelocity().y));
+            getUserData().setLinearVelocity(new Vector2(0f, body.getLinearVelocity().y));
         }
     }
 
@@ -227,5 +228,9 @@ public class Runner extends GameActor {
 
     public boolean isJumping() {
         return jumping;
+    }
+
+    public boolean isRising() {
+        return rising;
     }
 }

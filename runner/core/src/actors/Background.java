@@ -51,7 +51,7 @@ public class Background extends Actor {
     }
 
     private boolean rightBoundsReached(float delta) {
-        return (textureRegionBounds2.x - (delta * speed)) >= Constants.APP_WIDTH;
+        return (textureRegionBounds2.x - (delta * speed)) > Constants.APP_WIDTH;
     }
 
     private void updateXBounds(float delta) {
