@@ -194,11 +194,10 @@ public class GameStage extends Stage implements ContactListener {
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsGround(b)) ||
                 (BodyUtils.bodyIsGround(a) && BodyUtils.bodyIsRunner(b))) {
 
-            if (contact.getWorldManifold().getNormal().x == 0 && !runner.isRising() ){
+            //avoid the jump when runner is falling 
+            if (contact.getWorldManifold().getNormal().x == 0 && !runner.isRising()) {
                 runner.landed();
             }
-//            System.out.println(contact.getWorldManifold().getNormal());
-            System.out.println(contact.getTangentSpeed());
         }// contact between runner and deadzone
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
                 (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
@@ -212,7 +211,6 @@ public class GameStage extends Stage implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-//        System.out.println("up");
     }
 
     @Override
@@ -221,7 +219,12 @@ public class GameStage extends Stage implements ContactListener {
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-
+        //avoid the runner to run when he's against a wall
+        if (runner.getRunnerDir() == Runner.direction.RIGHT && contact.getWorldManifold().getNormal().x == 1) {
+            runner.stopRunning();
+        } else if (runner.getRunnerDir() == Runner.direction.LEFT && contact.getWorldManifold().getNormal().x == -1) {
+            runner.stopRunning();
+        }
     }
 
     private void setUpRunner() {

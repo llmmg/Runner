@@ -21,6 +21,7 @@ public class Runner extends GameActor {
     private boolean running;
     private boolean falling;
     private boolean rising; //used to know when the contact(collision) has to be ignored for landing
+    private boolean againstWall; //if runner is against a wall
 
     public enum direction {
         LEFT,
@@ -55,6 +56,8 @@ public class Runner extends GameActor {
     private float spriteWidth;
 
     float stateTime;
+
+
 
     //runner direction
     private direction runnerDir;
@@ -156,6 +159,9 @@ public class Runner extends GameActor {
             getUserData().setLinearVelocity(body.getLinearVelocity());
 
         falling = body.getLinearVelocity().y < 0;
+
+//        if(againstWall)
+//            System.out.println(getUserData().getRunningPosition());
     }
 
     public void runRight() {
@@ -187,7 +193,7 @@ public class Runner extends GameActor {
     }
 
     public void jump() {
-        if (!(jumping || dodging)&&!falling) {
+        if (!(jumping || dodging) && !falling) {
             System.out.println("jump");
             body.applyLinearImpulse(getUserData().getJumpingLinearImpulse(), body.getWorldCenter(), true);
             jumping = true;
@@ -201,15 +207,6 @@ public class Runner extends GameActor {
     public void dodge() {
         if (!jumping) {
 //            body.setTransform(body.getWorldCenter(), getUserData().getDodgeAngle());
-            //-------
-            //test
-//            if(running)
-//            {
-//                body.setLinearVelocity(0,0);
-//                body.applyLinearImpulse(10f,0,body.getWorldCenter().x,body.getWorldCenter().y,true);
-//            }
-            //endtest
-            //-------
             System.out.println("dodge");
             dodging = true;
             getUserData().setLinearVelocity(new Vector2(0f, body.getLinearVelocity().y));
@@ -232,5 +229,16 @@ public class Runner extends GameActor {
 
     public boolean isRising() {
         return rising;
+    }
+
+    public boolean isAgainstWall() {
+        return againstWall;
+    }
+
+    public void setAgainstWall(boolean againstWall) {
+        this.againstWall = againstWall;
+    }
+    public direction getRunnerDir() {
+        return runnerDir;
     }
 }
