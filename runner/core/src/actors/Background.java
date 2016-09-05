@@ -35,6 +35,7 @@ public class Background extends Actor {
         } else {
             updateXBounds(-delta);
         }
+
     }
 
     @Override
@@ -60,8 +61,10 @@ public class Background extends Actor {
     }
 
     public void setSpeed(float speed) {
-        this.speed = (int) speed * 10;
+        this.speed = (int) speed * 13;
     }
+
+
 
     private void resetBounds(boolean right) {
         if (right) {
