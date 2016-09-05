@@ -6,14 +6,35 @@
  <tileset firstgid="3" name="blocks" tilewidth="32" tileheight="32" tilecount="3" columns="3">
   <image source="blocks.png" width="96" height="32"/>
  </tileset>
- <layer name="obstacle" width="78" height="8" visible="0">
+ <tileset firstgid="6" name="tileCake2" tilewidth="32" tileheight="32" tilecount="2" columns="2">
+  <image source="tileCake2.png" width="64" height="32"/>
+ </tileset>
+ <tileset firstgid="8" name="endTile" tilewidth="32" tileheight="32" tilecount="2" columns="2">
+  <image source="endTile.png" width="64" height="32"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="200"/>
+    <frame tileid="1" duration="200"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="10" name="tentacleTile" tilewidth="32" tileheight="32" tilecount="2" columns="2">
+  <image source="tentacleTile.png" width="64" height="32"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="150"/>
+    <frame tileid="1" duration="150"/>
+   </animation>
+  </tile>
+ </tileset>
+ <layer name="obstacle" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUUBswD7QDhgDAFkaj4YYKiA2jkR5u6P4fyeHGjIbxydEbE+tmcswYiQAAVlcArA==
+   eJztlOEKgDAIhPfLovd/4Bg0ENGd07UR9MH9yvQ4rVJ+ItBuAx/lmNDjzeyJKfo+6h2hl5vsac3IZo+8z9htBs2f5Sl7Q6tuUCrryetby80zH/kcuWPrGeovtYLzUZ03srPG7m+ngjLL/L96/ajoe7uAOKi2iQZqPWrwzKyaWTN5Rjc+kQQF
   </data>
  </layer>
- <layer name="invisible" width="78" height="8">
+ <layer name="invisible" width="78" height="8" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRgAswDbQDhigYDTfcgAkNjwLiACMUI/NpbRct7aAUAAAwzAAT
+   eJxjYBgFo2AUjIJRMApGAbmACYpHAXUBIx5MjDp0OQY8cvj0EeMGXG4hxi+kYGQAADNoADw=
   </data>
  </layer>
 </map>
