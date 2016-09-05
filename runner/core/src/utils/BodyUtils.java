@@ -24,4 +24,9 @@ public class BodyUtils {
         UserData userData = (UserData) body.getUserData();
         return userData != null && userData.getUserDataType() == UserDataType.DEADZONE;
     }
+
+    public static boolean bodyIsEndLevel(Body body) {
+        UserData userData = (UserData) body.getUserData();
+        return userData != null && userData.getUserDataType() == UserDataType.ENDLEVEL;
+    }
 }
