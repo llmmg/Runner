@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="78" height="8" tilewidth="32" tileheight="32" nextobjectid="19">
+ <tileset firstgid="1" name="invisible" tilewidth="32" tileheight="32" tilecount="2" columns="2">
+  <image source="invisible.png" width="67" height="34"/>
+ </tileset>
+ <tileset firstgid="3" name="blocks" tilewidth="32" tileheight="32" tilecount="3" columns="3">
+  <image source="blocks.png" width="96" height="32"/>
+ </tileset>
+ <layer name="obstacle" width="78" height="8" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUUBswD7QDhgDAFkaj4YYKiA2jkR5u6P4fyeHGjIbxydEbE+tmcswYiQAAVlcArA==
+  </data>
+ </layer>
+ <layer name="invisible" width="78" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRgAswDbQDhigYDTfcgAkNjwLiACMUI/NpbRct7aAUAAAwzAAT
+  </data>
+ </layer>
+</map>

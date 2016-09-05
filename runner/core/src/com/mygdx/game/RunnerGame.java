@@ -1,16 +1,14 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.sun.glass.ui.EventLoop;
 import screens.GameScreen;
 
 //extends Game for multiple screen
 public class RunnerGame extends Game {
     private boolean isPause=false;
+	private int currentLevel =0;
     private RunnerGame(){}
 
     private static RunnerGame INSTANCE;
@@ -79,5 +77,11 @@ public class RunnerGame extends Game {
 			this.pause();
 			isPause = true;
 		}
+	}
+	public int getCurrentLevel(){
+		return currentLevel;
+	}
+	public int nextLevel(){
+		return currentLevel++;
 	}
 }

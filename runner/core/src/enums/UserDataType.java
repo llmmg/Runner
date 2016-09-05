@@ -6,5 +6,6 @@ package enums;
 public enum UserDataType {
     GROUND,
     RUNNER,
-    DEADZONE
+    DEADZONE,
+    ENDLEVEL
 }

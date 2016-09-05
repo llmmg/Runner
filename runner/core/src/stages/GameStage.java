@@ -1,13 +1,12 @@
 package stages;
 
-import actors.Background;
-import actors.DeadZone;
-import actors.Ground;
+import actors.*;
 import actors.HUD.ButtonPause;
 import actors.HUD.TextScore;
-import actors.Runner;
 import box2d.DeadZoneUserData;
+import box2d.EndLevelUserData;
 import box2d.GroundUserData;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -41,6 +40,7 @@ public class GameStage extends Stage implements ContactListener {
     private static final int VIEWPORT_HEIGHT = Constants.APP_HEIGHT;
 
     private boolean debug = true;
+
 
     private World world;
     private Ground ground;
@@ -105,7 +105,7 @@ public class GameStage extends Stage implements ContactListener {
     }
 
     private void createWalls() {
-        tileMap = new TmxMapLoader().load("core\\assets\\map\\level.tmx");
+        tileMap = new TmxMapLoader().load("core\\assets\\map\\level"+ game.getCurrentLevel()+".tmx");
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight = tileMap.getProperties().get("height", Integer.class);
         tileSize = tileMap.getProperties().get("tilewidth", Integer.class);
@@ -114,12 +114,11 @@ public class GameStage extends Stage implements ContactListener {
         layer = (TiledMapTileLayer) tileMap.getLayers().get("obstacle");
         createBlocks(layer);
 
-        layer = (TiledMapTileLayer) tileMap.getLayers().get("deadzone");
-        createDeadZone(layer);
+        layer = (TiledMapTileLayer) tileMap.getLayers().get("invisible");
+        createInvisible(layer);
     }
 
-    private void createDeadZone(TiledMapTileLayer layer) {
-        // go through all cells in layer
+    private void createInvisible(TiledMapTileLayer layer) {
         for (int row = 0; row < layer.getHeight(); row++) {
             for (int col = 0; col < layer.getWidth(); col++) {
 
@@ -129,7 +128,7 @@ public class GameStage extends Stage implements ContactListener {
                 // check that there is a cell
                 if (cell == null) continue;
                 if (cell.getTile() == null) continue;
-
+                System.out.println(cell.getTile().getId());
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyType.StaticBody;
@@ -138,11 +137,18 @@ public class GameStage extends Stage implements ContactListener {
                 Body body = world.createBody(bdef);
                 PolygonShape shape = new PolygonShape();
                 shape.setAsBox(0.5f, 0.5f);
-
-                body.createFixture(shape, 0f);
-                body.setUserData(new DeadZoneUserData());
+                body.createFixture(shape, Constants.GROUND_DENSITY);
+                switch (cell.getTile().getId()) {
+                    case 1:
+                        body.setUserData(new DeadZoneUserData());
+                        addActor(new DeadZone(body));
+                        break;
+                    case 2:
+                        body.setUserData(new EndLevelUserData());
+                        addActor(new EndLevel(body));
+                        break;
+                }
                 shape.dispose();
-                addActor(new DeadZone(body));
                 //cs.dispose();
 
             }
@@ -207,6 +213,16 @@ public class GameStage extends Stage implements ContactListener {
             //setUpWorld():
 //            runner.getUserData().setRunningPosition(new Vector2(Constants.RUNNER_X, Constants.RUNNER_Y));
             System.out.println("perdu");
+        }
+        if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsEndLevel(b)) ||
+                (BodyUtils.bodyIsEndLevel(a) && BodyUtils.bodyIsRunner(b))) {
+            if (contact.getWorldManifold().getNormal().x == 0){
+                game.nextLevel();
+                game.reset();
+                runner.landed();
+                System.out.println("Fin du niveau");
+            }
+
         }
     }
 
