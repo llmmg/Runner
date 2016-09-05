@@ -24,7 +24,7 @@ public class Constants {
     public static final float RUNNER_HEIGHT = 1.8f;
     public static final float RUNNER_DENSITY = 0.5f;
 
-    public static final float RUNNER_GRAVITY_SCALE = 3f; //gravity is amplified for a best gameplay
+    public static final float RUNNER_GRAVITY_SCALE = 4f; //gravity is amplified for a best gameplay
     public static final Vector2 RUNNER_JUMPING_LINEAR_IMPULSE = new Vector2(0, 13f);
 
     public static final float RUNNER_DODGE_X = 2f;
