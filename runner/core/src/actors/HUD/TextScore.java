@@ -28,7 +28,7 @@ public class TextScore extends Actor {
         textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = font;
         time = new TextButton("Score", textButtonStyle);
-        time.setBounds(20, 10,10,10);
+        time.setBounds(Constants.APP_WIDTH/2, Constants.APP_HEIGHT-20,10,10);
     }
     public TextButton getTextScore()
     {
@@ -44,5 +44,8 @@ public class TextScore extends Actor {
         minutes = (float)Math.floor(totalTime / 60.0f);
         seconds = totalTime - minutes * 60.0f;
         time.setText(String.format("%.0fm%.0fs", minutes, seconds));
+    }
+    public String getTime(){
+        return String.format("Temps : %.0fm : %.0fs \n Appuyez sur espace pour continuer ",minutes,seconds);
     }
 }

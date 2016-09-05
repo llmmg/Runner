@@ -9,6 +9,8 @@ import screens.GameScreen;
 public class RunnerGame extends Game {
     private boolean isPause=false;
 	private int currentLevel =0;
+	private boolean isEndLevel=false;
+
     private RunnerGame(){}
 
     private static RunnerGame INSTANCE;
@@ -36,6 +38,15 @@ public class RunnerGame extends Game {
 			reset();
 		if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
 			setPause();
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+			if (isEndLevel)
+			{
+				isEndLevel=false;
+				nextLevel();
+				setPause();
+				this.reset();
+			}
 		}
         super.render();
 	}
@@ -69,13 +80,14 @@ public class RunnerGame extends Game {
         return isPause;
     }
     public void setPause(){
-		if(isPause){
-			this.resume();
-			isPause=false;
-		}
-		else {
-			this.pause();
-			isPause = true;
+    	if(!isEndLevel) {
+			if (isPause) {
+				this.resume();
+				isPause = false;
+			} else {
+				this.pause();
+				isPause = true;
+			}
 		}
 	}
 	public int getCurrentLevel(){
@@ -83,5 +95,9 @@ public class RunnerGame extends Game {
 	}
 	public int nextLevel(){
 		return currentLevel++;
+	}
+	public void setEndLevel(){
+		setPause();
+		isEndLevel=true;
 	}
 }

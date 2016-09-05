@@ -1,12 +1,10 @@
 package stages;
 
 import actors.*;
-import actors.HUD.ButtonPause;
-import actors.HUD.TextScore;
+import actors.HUD.*;
 import box2d.DeadZoneUserData;
 import box2d.EndLevelUserData;
 import box2d.GroundUserData;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -63,6 +61,7 @@ public class GameStage extends Stage implements ContactListener {
     private int tileSize;
     private OrthogonalTiledMapRenderer tmRenderer;
 
+    private TextEndLevel textEndLevel;
     private ButtonPause pauseButton;
     private TextScore textScore;
     private RunnerGame game;
@@ -128,7 +127,6 @@ public class GameStage extends Stage implements ContactListener {
                 // check that there is a cell
                 if (cell == null) continue;
                 if (cell.getTile() == null) continue;
-                System.out.println(cell.getTile().getId());
                 // create body from cell
                 BodyDef bdef = new BodyDef();
                 bdef.type = BodyType.StaticBody;
@@ -204,7 +202,7 @@ public class GameStage extends Stage implements ContactListener {
                 runner.landed();
             }
 //            System.out.println(contact.getWorldManifold().getNormal());
-            System.out.println(contact.getTangentSpeed());
+            //System.out.println(contact.getTangentSpeed());
         }// contact between runner and deadzone
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
                 (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
@@ -217,9 +215,9 @@ public class GameStage extends Stage implements ContactListener {
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsEndLevel(b)) ||
                 (BodyUtils.bodyIsEndLevel(a) && BodyUtils.bodyIsRunner(b))) {
             if (contact.getWorldManifold().getNormal().x == 0){
-                game.nextLevel();
-                game.reset();
+                game.setEndLevel();
                 runner.landed();
+                setUpEndLevel();
                 System.out.println("Fin du niveau");
             }
 
@@ -284,6 +282,13 @@ public class GameStage extends Stage implements ContactListener {
     private void setUpScore() {
         textScore = new TextScore();
         addActor(textScore.getTextScore());
+    }
+
+    private void setUpEndLevel() {
+        textEndLevel = new TextEndLevel();
+        textEndLevel.showTextEndLevel(textScore.getTime());
+        addActor(textEndLevel.getTextEndLevel());
+        textEndLevel.setVisible(true);
     }
 
     public float scale(float valueToBeScaled) {
