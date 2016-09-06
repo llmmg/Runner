@@ -104,7 +104,7 @@ public class GameStage extends Stage implements ContactListener {
     }
 
     private void createWalls() {
-        tileMap = new TmxMapLoader().load("core\\assets\\map\\level"+ game.getCurrentLevel()+".tmx");
+        tileMap = new TmxMapLoader().load("core\\assets\\map\\level" + game.getCurrentLevel() + ".tmx");
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight = tileMap.getProperties().get("height", Integer.class);
         tileSize = tileMap.getProperties().get("tilewidth", Integer.class);
@@ -194,14 +194,16 @@ public class GameStage extends Stage implements ContactListener {
         Body a = contact.getFixtureA().getBody();
         Body b = contact.getFixtureB().getBody();
 
+        float normal=contact.getWorldManifold().getNormal().x;
         //if the runner touch the ground
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsGround(b)) ||
                 (BodyUtils.bodyIsGround(a) && BodyUtils.bodyIsRunner(b))) {
 
             //avoid the jump when runner is falling 
-            if (contact.getWorldManifold().getNormal().x == 0 && !runner.isRising()) {
+            if ((normal <= 0.2 && normal >= -0.2) && !runner.isRising()) {
                 runner.landed();
             }
+            System.out.println(normal);
         }// contact between runner and deadzone
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
                 (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
@@ -213,7 +215,7 @@ public class GameStage extends Stage implements ContactListener {
         }
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsEndLevel(b)) ||
                 (BodyUtils.bodyIsEndLevel(a) && BodyUtils.bodyIsRunner(b))) {
-            if (contact.getWorldManifold().getNormal().x == 0){
+            if (normal == 0) {
                 game.setEndLevel();
                 runner.landed();
                 setUpEndLevel();
@@ -343,17 +345,6 @@ public class GameStage extends Stage implements ContactListener {
     //(look at inputProcessor for methodes...)
     @Override
     public boolean keyDown(int keycode) {
-//        if(keycode==Input.Keys.UP)
-//        {
-//            System.out.println("UPP!!!");
-//            runner.jump();
-//        }else if(keycode==Input.Keys.DOWN)
-//        {
-//            runner.dodge();
-//        }else if(keycode==Input.Keys.RIGHT)
-//        {
-//            runner.runRight();
-//        }
         if (!game.getState()) {
             switch (keycode) {
                 case Input.Keys.UP:
@@ -364,11 +355,9 @@ public class GameStage extends Stage implements ContactListener {
                     runner.stopRunning();
                     break;
                 case Input.Keys.RIGHT:
-                    //camera.position.x+=1f;
                     runner.runRight();
                     break;
                 case Input.Keys.LEFT:
-                    //camera.position.x-=1f;
                     runner.runLeft();
                     break;
             }

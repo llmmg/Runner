@@ -46,9 +46,6 @@ public class Runner extends GameActor {
     private TextureRegion[] fallFrames;
 
     private Texture spriteSheet;
-//    private TextureRegion[] walkFrames;
-//    private TextureRegion[] idleFrames;
-//    private TextureRegion[] jumpFrames;
 
     private int imgWalk = 12;
     private int imgIdle = 3;
@@ -71,19 +68,6 @@ public class Runner extends GameActor {
         jumpAnimation = initAnimation(textureAtlas, jumpFrames, Constants.CAT_JUMP_REGION_NAMES, 0.1f);
         fallAnimation = initAnimation(textureAtlas, fallFrames, Constants.CAT_FALL_REGION_NAMES, 0.1f);
         slideAnimation = initAnimation(textureAtlas, slideFrames, Constants.CAT_SLIDE_REGION_NAMES, 0.1f);
-
-
-//        walkFrames = new TextureRegion[imgWalk];
-//        createAnimation(walkFrames, Constants.CHARACTER_RUN_PATH, imgWalk);
-//        walkAnimation = new Animation(0.05f, walkFrames);
-
-//        idleFrames = new TextureRegion[imgIdle];
-//        createAnimation(idleFrames, Constants.CHARACTER_IDLE_PATH, imgIdle);
-//        idleAnimation = new Animation(0.1f, idleFrames);
-
-//        jumpFrames = new TextureRegion[imgJump];
-//        createAnimation(jumpFrames, Constants.CHARACTER_JUMP_PATH, imgJump);
-//        jumpAnimation = new Animation(0.1f, jumpFrames);
 
     }
 
@@ -189,7 +173,6 @@ public class Runner extends GameActor {
         }
         //set dataSpeed to 0 when runner stop running
         getUserData().setLinearVelocity(body.getLinearVelocity());
-        System.out.println("stop running");
     }
 
     public void jump() {
