@@ -33,16 +33,14 @@ import utils.WorldUtils;
  */
 public class GameStage extends Stage implements ContactListener {
 
-    // This will be our viewport measurements while working with the debug renderer
+    // This is our viewport measurements while working with the debug renderer (was 20,13)
     private static final int VIEWPORT_WIDTH = Constants.APP_WIDTH;
     private static final int VIEWPORT_HEIGHT = Constants.APP_HEIGHT;
 
     private boolean debug = true;
 
-
     private World world;
     private Ground ground;
-    private Ground g2; //Test
     private Runner runner;
     private Background background;
 
@@ -73,24 +71,21 @@ public class GameStage extends Stage implements ContactListener {
         game = RunnerGame.getINSTANCE();
         setUpWorld();
         setupCamera();
-        setUpTouchControlAreas();
+
+        //inputs
+        Gdx.input.setInputProcessor(this);
         renderer = new Box2DDebugRenderer();
     }
 
-    //useless
-    private void setUpTouchControlAreas() {
-        touchPoint = new Vector3();
-        screenLeftSide = new Rectangle(0, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
-        screenRightSide = new Rectangle(getCamera().viewportWidth / 2, 0, getCamera().viewportWidth / 2, getCamera().viewportHeight);
-        Gdx.input.setInputProcessor(this);
-    }
-
+    /**
+     * Initialise world.
+     * Call setUp functions
+     */
     private void setUpWorld() {
         world = WorldUtils.createWorld();
 
         //handling contacts
         world.setContactListener(this);
-        //setUpGround();
         setUpBackground();
         setUpRunner();
         setUpPause();
@@ -98,103 +93,49 @@ public class GameStage extends Stage implements ContactListener {
         createWalls();
     }
 
+    /**
+     * Initialise background and add it in the stage
+     */
     private void setUpBackground() {
         background = new Background();
         addActor(background);
     }
 
+    /**
+     * Import the tile map from .tmx file
+     */
     private void createWalls() {
-        tileMap = new TmxMapLoader().load(String.format(Constants.MAP_TMX_PATH,game.getCurrentLevel()));
+        tileMap = new TmxMapLoader().load(String.format(Constants.MAP_TMX_PATH, game.getCurrentLevel()));
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight = tileMap.getProperties().get("height", Integer.class);
         tileSize = tileMap.getProperties().get("tilewidth", Integer.class);
         tmRenderer = new OrthogonalTiledMapRenderer(tileMap, 1 / Constants.SCALE);
         TiledMapTileLayer layer;
         layer = (TiledMapTileLayer) tileMap.getLayers().get("obstacle");
-        createBlocks(layer);
+        WorldUtils.createBlocks(layer, this, world);
 
         layer = (TiledMapTileLayer) tileMap.getLayers().get("invisible");
-        createInvisible(layer);
-    }
-
-    private void createInvisible(TiledMapTileLayer layer) {
-        for (int row = 0; row < layer.getHeight(); row++) {
-            for (int col = 0; col < layer.getWidth(); col++) {
-
-                // get cell
-                Cell cell = layer.getCell(col, row);
-
-                // check that there is a cell
-                if (cell == null) continue;
-                if (cell.getTile() == null) continue;
-                // create body from cell
-                BodyDef bdef = new BodyDef();
-                bdef.type = BodyType.StaticBody;
-                bdef.position.set((col + 0.5f), (row + 0.5f));
-
-                Body body = world.createBody(bdef);
-                PolygonShape shape = new PolygonShape();
-                shape.setAsBox(0.5f, 0.5f);
-                body.createFixture(shape, Constants.GROUND_DENSITY);
-                switch (cell.getTile().getId()) {
-                    case 1:
-                        body.setUserData(new DeadZoneUserData());
-                        addActor(new DeadZone(body));
-                        break;
-                    case 2:
-                        body.setUserData(new EndLevelUserData());
-                        addActor(new EndLevel(body));
-                        break;
-                }
-                shape.dispose();
-                //cs.dispose();
-
-            }
-        }
-    }
-
-    private void createBlocks(TiledMapTileLayer layer) {
-
-        // tile size
-        float ts = layer.getTileWidth();
-
-        // go through all cells in layer
-        for (int row = 0; row < layer.getHeight(); row++) {
-            for (int col = 0; col < layer.getWidth(); col++) {
-
-                // get cell
-                Cell cell = layer.getCell(col, row);
-
-                // check that there is a cell
-                if (cell == null) continue;
-                if (cell.getTile() == null) continue;
-
-                // create body from cell
-                BodyDef bdef = new BodyDef();
-                bdef.type = BodyType.StaticBody;
-                bdef.position.set((col + 0.5f), (row + 0.5f));
-
-                Body body = world.createBody(bdef);
-                PolygonShape shape = new PolygonShape();
-                shape.setAsBox(0.5f, 0.5f);
-
-                body.createFixture(shape, Constants.GROUND_DENSITY);
-                body.setUserData(new GroundUserData());
-                shape.dispose();
-                addActor(new Ground(body));
-                //cs.dispose();
-
-            }
-        }
+//        createInvisible(layer);
+        WorldUtils.createInvisibleCells(layer, this, world);
 
     }
 
+    /**
+     * libgdx beginContact function:
+     * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ContactListener.html#beginContact-com.badlogic.gdx.physics.box2d.Contact-">beginContact</a>
+     *
+     * @param contact
+     * <p>
+     *    Detect collisions between the runner and other body like ground, endLevel or deadZone.
+     *    Avoid the multi-jump for the runner.
+     * </p>
+     */
     @Override
     public void beginContact(Contact contact) {
         Body a = contact.getFixtureA().getBody();
         Body b = contact.getFixtureB().getBody();
 
-        float normal=contact.getWorldManifold().getNormal().x;
+        float normal = contact.getWorldManifold().getNormal().x;
         //if the runner touch the ground
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsGround(b)) ||
                 (BodyUtils.bodyIsGround(a) && BodyUtils.bodyIsRunner(b))) {
@@ -204,13 +145,13 @@ public class GameStage extends Stage implements ContactListener {
                 runner.landed();
             }
             System.out.println(normal);
-        }// contact between runner and deadzone
+        }
+        // contact between runner and deadzone
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
                 (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
             runner.landed();
             game.reset();
-            //setUpWorld():
-//            runner.getUserData().setRunningPosition(new Vector2(Constants.RUNNER_X, Constants.RUNNER_Y));
+
             System.out.println("perdu");
         }
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsEndLevel(b)) ||
@@ -221,20 +162,43 @@ public class GameStage extends Stage implements ContactListener {
                 setUpEndLevel();
                 System.out.println("Fin du niveau");
             }
-
         }
     }
 
+    /**
+     * libgdx endContact function:
+     * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ContactListener.html#endContact-com.badlogic.gdx.physics.box2d.Contact-">endContact</a>
+     *
+     * @param contact
+     */
     @Override
     public void endContact(Contact contact) {
     }
 
+    /**
+     * libgdx preSolve function:
+     * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ContactListener.html#preSolve-com.badlogic.gdx.physics.box2d.Contact-com.badlogic.gdx.physics.box2d.Manifold-">preSolve</a>
+     *
+     * @param contact
+     * @param oldManifold
+     */
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
     }
 
+    /**
+     * libgdx postSolve function:
+     * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ContactListener.html#postSolve-com.badlogic.gdx.physics.box2d.Contact-com.badlogic.gdx.physics.box2d.ContactImpulse-">postSolve</a>
+     *
+     * @param contact
+     * @param impulse
+     * <p> Used to avoid the runner to keep running when he's against a wall
+     * </p>
+     *
+     */
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
+        System.out.println("postSolve");
         //avoid the runner to run when he's against a wall
         if (runner.getRunnerDir() == Runner.direction.RIGHT && contact.getWorldManifold().getNormal().x == 1) {
             runner.stopRunning();
@@ -243,34 +207,14 @@ public class GameStage extends Stage implements ContactListener {
         }
     }
 
+    /**
+     * Setup runner and add it to the stage.
+     */
     private void setUpRunner() {
         runner = new Runner(WorldUtils.createRunner(world));
         addActor(runner);
     }
 
-    private void setUpGround() {
-        ground = new Ground(WorldUtils.createGround(world));
-
-        //test------------
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(new Vector2(Constants.GROUND_X, 5f));
-        Body body = world.createBody(bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(2f, 2f);
-        body.createFixture(shape, Constants.GROUND_DENSITY);
-
-        body.setUserData(new GroundUserData());
-
-        shape.dispose();
-        addActor(new Ground(body));
-        //test end---------------
-
-        addActor(ground);
-
-        Ground g3 = new Ground(WorldUtils.createGround2(world));
-        addActor(g3);
-
-    }
 
     private void setupCamera() {
         camera = new OrthographicCamera(scale(VIEWPORT_WIDTH), scale(VIEWPORT_HEIGHT));
@@ -300,6 +244,14 @@ public class GameStage extends Stage implements ContactListener {
     }
 
 
+    /**
+     * libgdx act function:
+     * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#act--">act</a>
+     * @param delta
+     * <p>
+     *     compute time steps
+     * </p>
+     */
     @Override
     public void act(float delta) {
         if (!game.getState()) {
@@ -316,10 +268,15 @@ public class GameStage extends Stage implements ContactListener {
             world.step(TIME_STEP, 6, 2);
             accumulator -= TIME_STEP;
         }
-
-        //TODO: Implement interpolation
     }
 
+    /**
+     * libgdx draw function
+     * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#draw--">draw</a>
+     * <p>
+     *     Render camera, text score, background and tiled
+     * </p>
+     */
     @Override
     public void draw() {
         super.draw();
@@ -338,7 +295,11 @@ public class GameStage extends Stage implements ContactListener {
 
     }
 
-    //(look at inputProcessor for methodes...)
+    /**
+     * 
+     * @param keycode
+     * @return
+     */
     @Override
     public boolean keyDown(int keycode) {
         if (!game.getState()) {

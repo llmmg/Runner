@@ -2,6 +2,8 @@ package screens;
 
 /**
  * Created by Lancelot on 22.08.2016.
+ *
+ * This class contain GameStage object
  */
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
