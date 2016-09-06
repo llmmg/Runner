@@ -22,11 +22,11 @@ public class TextEndLevel extends Actor {
         font = new BitmapFont();
         labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
-        labelStyle.fontColor= Color.RED;
+        labelStyle.fontColor= Color.PURPLE;
 
         time = new Label("Score", labelStyle);
         time.setAlignment(Align.center);
-        time.setBounds(Constants.APP_WIDTH / 2, Constants.APP_HEIGHT/2, 0, 0);
+        time.setBounds(Constants.APP_WIDTH / 2, Constants.APP_HEIGHT/2+100, 0, 0);
     }
     public void showTextEndLevel(String text){
         time.setText(text);

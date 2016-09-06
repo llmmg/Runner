@@ -35,6 +35,7 @@ public class Constants {
 
     public static final String BACKGROUND_IMAGE_PATH = "core//assets//map//background3.png";
     public static final String BUTTON_PAUSE_IMG = "core//assets//pauseSkin.png";
+    public static final String LABEL_TIMER_IMG = "core//assets//timerSkin.png";
 
     public static final String CHARACTER_RUN_PATH = "core//assets//sprites//runSprite.png";
     public static final String CHARACTER_IDLE_PATH = "core//assets//sprites//idle.png";
