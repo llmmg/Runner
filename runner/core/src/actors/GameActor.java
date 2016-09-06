@@ -13,7 +13,6 @@ public abstract class GameActor extends Actor {
     protected UserData userData;
 
     /**
-     * GameActor class constructor
      * @param body A rigid body
      */
     public GameActor(Body body) {

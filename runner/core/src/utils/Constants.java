@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by Lancelot on 22.08.2016.
+ *
+ * This class store all the constants for the game
  */
 public class Constants {
     public static final int APP_WIDTH = 800;
@@ -30,16 +32,12 @@ public class Constants {
     public static final float RUNNER_DODGE_X = 2f;
     public static final float RUNNER_DODGE_Y = 1.5f;
 
-    //useful for an infinite runner but not for our platformer
+    //useful for an infinite runner but not for our platformer so it's initially set to 0,0
     public static final Vector2 RUNNER_VELOCITY = new Vector2(0, 0);
 
     public static final String BACKGROUND_IMAGE_PATH = "core//assets//map//background3.png";
     public static final String BUTTON_PAUSE_IMG = "core//assets//pauseSkin.png";
     public static final String LABEL_TIMER_IMG = "core//assets//timerSkin.png";
-
-    public static final String CHARACTER_RUN_PATH = "core//assets//sprites//runSprite.png";
-    public static final String CHARACTER_IDLE_PATH = "core//assets//sprites//idle.png";
-    public static final String CHARACTER_JUMP_PATH = "core//assets//sprites//jump.png";
 
     public static final String CAT_ATLAS_PATH = "core//assets//sprites//cat//cat.txt";
     public static final String[] CAT_RUN_REGION_NAMES = new String[]{"Run (1)", "Run (2)", "Run (3)", "Run (4)", "Run (5)", "Run (6)", "Run (7)", "Run (8)"};

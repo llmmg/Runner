@@ -27,10 +27,12 @@ public class Background extends Actor {
     }
 
     /**
-     * @param delta time interval
+     * Libgdx act doc : <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html#act-float-">act</a>
+     * Here it test if left or right bound is reached and update position of background bounds.
      */
     @Override
     public void act(float delta) {
+        super.act(delta);
         if (leftBoundsReached(delta)) {
             resetBounds(false);
         } else if (rightBoundsReached(delta)) {
@@ -41,8 +43,8 @@ public class Background extends Actor {
     }
 
     /**
-     * @param batch
-     * @param parentAlpha
+     * See libgdx draw doc here:<a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw</a>
+     * Draw the two part of background
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {

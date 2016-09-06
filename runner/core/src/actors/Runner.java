@@ -101,8 +101,7 @@ public class Runner extends GameActor {
     }
 
     /**
-     * @param batch
-     * @param parentAlpha
+     * See libgdx draw doc here:<a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw</a>
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -142,8 +141,7 @@ public class Runner extends GameActor {
     }
 
     /**
-     *
-     * @param delta
+     * Libgdx act doc : <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html#act-float-">act</a>
      */
     @Override
     public void act(float delta) {
