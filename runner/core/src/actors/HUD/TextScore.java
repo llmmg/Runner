@@ -1,6 +1,7 @@
 package actors.HUD;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygdx.game.RunnerGame;
 import utils.Constants;
 
+import javax.swing.text.LabelView;
+
 /**
  * Created by Lancelot on 30.08.2016.
  */
@@ -16,21 +19,22 @@ public class TextScore extends Actor {
     private float totalTime;
     private float minutes;
     private float seconds;
-    //private Label time;
-    private TextButton.TextButtonStyle textButtonStyle;
+    private Label time;
+    private Label.LabelStyle labelStyle;
     private BitmapFont font;
-    private TextButton time;
     private RunnerGame game;
     public TextScore(){
         game= RunnerGame.getINSTANCE();
         totalTime=0;
         font = new BitmapFont();
-        textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
-        time = new TextButton("Score", textButtonStyle);
+        labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        //labelStyle.background = ;
+        time = new Label("Score", labelStyle);
+
         time.setBounds(Constants.APP_WIDTH/2, Constants.APP_HEIGHT-20,10,10);
     }
-    public TextButton getTextScore()
+    public Label getTextScore()
     {
         return  time;
     }
