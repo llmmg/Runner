@@ -274,7 +274,6 @@ public class GameStage extends Stage implements ContactListener {
 
     private void setupCamera() {
         camera = new OrthographicCamera(scale(VIEWPORT_WIDTH), scale(VIEWPORT_HEIGHT));
-//        camera.setToOrtho(false,Constants.APP_WIDTH,Constants.APP_HEIGHT);
         camera.position.set(scale(VIEWPORT_WIDTH) / 2, scale(VIEWPORT_HEIGHT) / 2, 0f);
         camera.update();
     }
@@ -324,17 +323,14 @@ public class GameStage extends Stage implements ContactListener {
     @Override
     public void draw() {
         super.draw();
-//        System.out.println(runner.getUserData().getLinearVelocity());
         camera.position.set(runner.getUserData().getRunningPosition().x, runner.getUserData().getRunningPosition().y, 0f);
         camera.update();
+
         textScore.update();
         background.setSpeed(runner.getUserData().getLinearVelocity().x);
-        // System.out.println(runner.getUserData().getLinearVelocity().x);
         tmRenderer.setView(camera);
-//        TiledMapTileLayer layer;
-//        layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
-//        tmRenderer.renderTileLayer(layer);
         tmRenderer.render();
+
 
         if (debug) {
             renderer.render(world, camera.combined);

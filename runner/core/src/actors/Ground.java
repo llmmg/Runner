@@ -1,7 +1,6 @@
 package actors;
 
 import box2d.GroundUserData;
-import box2d.UserData;
 import com.badlogic.gdx.physics.box2d.Body;
 
 /**
@@ -13,6 +12,9 @@ public class Ground extends GameActor {
         super(body);
     }
 
+    /**
+     * @return a ground typed userData
+     */
     @Override
     public GroundUserData getUserData() {
         return (GroundUserData)userData;

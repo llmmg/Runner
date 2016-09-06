@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.RunnerGame;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import utils.Constants;
 
 /**
@@ -30,6 +29,7 @@ public class Background extends Actor {
 
     /**
      * Libgdx act doc : <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html#act-float-">act</a>
+     *
      * Here it test if left or right bound is reached and update position of background bounds.
      */
     @Override
@@ -46,6 +46,7 @@ public class Background extends Actor {
 
     /**
      * See libgdx draw doc here:<a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw</a>
+     *
      * Draw the two part of background
      */
     @Override

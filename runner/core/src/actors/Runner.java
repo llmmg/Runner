@@ -21,7 +21,6 @@ public class Runner extends GameActor {
     private boolean running;
     private boolean falling;
     private boolean rising; //used to know when the contact(collision) has to be ignored for landing
-    private boolean againstWall; //if runner is against a wall
 
     public enum direction {
         LEFT,
@@ -50,8 +49,6 @@ public class Runner extends GameActor {
     private direction runnerDir;
 
     /**
-     * Runner class constructor
-     *
      * @param body A rigid body
      */
     public Runner(Body body) {
@@ -63,11 +60,10 @@ public class Runner extends GameActor {
         jumpAnimation = initAnimation(textureAtlas, jumpFrames, Constants.CAT_JUMP_REGION_NAMES, 0.1f);
         fallAnimation = initAnimation(textureAtlas, fallFrames, Constants.CAT_FALL_REGION_NAMES, 0.1f);
         slideAnimation = initAnimation(textureAtlas, slideFrames, Constants.CAT_SLIDE_REGION_NAMES, 0.1f);
-
     }
 
     /**
-     * Create sprite animation from picture and data sheet
+     * Create and return sprite animation from picture and data sheet
      *
      * @param textureAtlas   Object that contain file path to the sprites data sheet
      * @param frames         Rectangular area of a texture. it's initialised in the function
@@ -85,10 +81,11 @@ public class Runner extends GameActor {
     }
 
     /**
+     * @deprecated replaced by initAnimation
      * @param texReg
      * @param name
      * @param nbImg
-     * @deprecated replaced by initAnimation
+     *
      */
     public void createAnimation(TextureRegion[] texReg, String name, int nbImg) {
         spriteSheet = new Texture(Gdx.files.internal(name));
@@ -102,6 +99,7 @@ public class Runner extends GameActor {
 
     /**
      * See libgdx draw doc here:<a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw</a>
+     * define which animation play according to actual runner state
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -132,7 +130,7 @@ public class Runner extends GameActor {
     }
 
     /**
-     * Getter to UserData where runner informations like speed or positions are stored
+     * Getter to UserData where runner information like speed or positions are stored
      * @return
      */
     @Override
@@ -142,16 +140,21 @@ public class Runner extends GameActor {
 
     /**
      * Libgdx act doc : <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html#act-float-">act</a>
+     *
+     * Update runner position and speed with data stored in UserData object.
      */
     @Override
     public void act(float delta) {
         super.act(delta);
         getUserData().setRunningPosition(body.getPosition());
+
         if (running)
             body.setLinearVelocity(getUserData().getLinearVelocity().x, body.getLinearVelocity().y);
+
         if (dodging)
             getUserData().setLinearVelocity(body.getLinearVelocity());
 
+        //if runner is falling, it's speed is negative
         falling = body.getLinearVelocity().y < 0;
     }
 
@@ -210,11 +213,10 @@ public class Runner extends GameActor {
     }
 
     /**
-     * Make the runner crounch and slide if he's running
+     * Make the runner crouch and slide if he's running
      */
     public void dodge() {
         if (!jumping) {
-//            body.setTransform(body.getWorldCenter(), getUserData().getDodgeAngle());
             System.out.println("dodge");
             dodging = true;
             getUserData().setLinearVelocity(new Vector2(0f, body.getLinearVelocity().y));
@@ -225,7 +227,6 @@ public class Runner extends GameActor {
      */
     public void stopDodge() {
         dodging = false;
-        body.setTransform(body.getWorldCenter(), 0f);
         stopRunning();
         System.out.println("stopDodge");
     }
@@ -254,7 +255,7 @@ public class Runner extends GameActor {
     }
 
     /**
-     * @return direction of the runner
+     * @return direction of the runner (LEFT or RIGHT)
      */
     public direction getRunnerDir() {
         return runnerDir;
