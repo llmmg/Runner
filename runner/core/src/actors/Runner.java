@@ -216,6 +216,7 @@ public class Runner extends GameActor {
     public void stopDodge() {
         dodging = false;
         body.setTransform(body.getWorldCenter(), 0f);
+        stopRunning();
         System.out.println("stopDodge");
     }
 
