@@ -68,7 +68,9 @@ public class RunnerGame extends Game {
 
 	public void reset(){
         try {
-            setScreen(getScreen().getClass().newInstance());
+            if(!isEndLevel) {
+                setScreen(getScreen().getClass().newInstance());
+            }
         } catch(InstantiationException e) {
             e.printStackTrace();
         } catch(IllegalAccessException e) {
