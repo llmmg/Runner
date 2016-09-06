@@ -28,9 +28,6 @@ public class Runner extends GameActor {
         RIGHT
     }
 
-    //    private Animation walkAnimation;
-//    private Animation idleAnimation;
-//    private Animation jumpAnimation;
     private Animation currentAnimation;
 
     //cat sprite
@@ -47,18 +44,16 @@ public class Runner extends GameActor {
 
     private Texture spriteSheet;
 
-    private int imgWalk = 12;
-    private int imgIdle = 3;
-    private int imgJump = 3;
-    private float spriteWidth;
-
     float stateTime;
-
-
 
     //runner direction
     private direction runnerDir;
 
+    /**
+     * Runner class constructor
+     *
+     * @param body A rigid body
+     */
     public Runner(Body body) {
         super(body);
 
@@ -71,17 +66,30 @@ public class Runner extends GameActor {
 
     }
 
-    //create sprite animation from picture and datasheet
+    /**
+     * Create sprite animation from picture and data sheet
+     *
+     * @param textureAtlas   Object that contain file path to the sprites data sheet
+     * @param frames         Rectangular area of a texture. it's initialised in the function
+     * @param regionsNames   Name of sprites from data sheet
+     * @param animationSpeed Time between frames
+     * @return Animation
+     */
     private Animation initAnimation(TextureAtlas textureAtlas, TextureRegion[] frames, String[] regionsNames, float animationSpeed) {
         frames = new TextureRegion[regionsNames.length];
         for (int i = 0; i < regionsNames.length; i++) {
             String path = regionsNames[i];
             frames[i] = textureAtlas.findRegion(path);
         }
-
         return new Animation(animationSpeed, frames);
     }
 
+    /**
+     * @param texReg
+     * @param name
+     * @param nbImg
+     * @deprecated replaced by initAnimation
+     */
     public void createAnimation(TextureRegion[] texReg, String name, int nbImg) {
         spriteSheet = new Texture(Gdx.files.internal(name));
         TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / nbImg, spriteSheet.getHeight());
@@ -92,7 +100,10 @@ public class Runner extends GameActor {
         stateTime = 0f;
     }
 
-
+    /**
+     * @param batch
+     * @param parentAlpha
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -100,11 +111,9 @@ public class Runner extends GameActor {
         if (running && !jumping) {
             currentAnimation = runningAnimation;
         } else if (falling) {
-//            System.out.println("fall anim");
             currentAnimation = fallAnimation;
             rising = false;
         } else if (jumping) {
-//            System.out.println("jump anim");
             currentAnimation = jumpAnimation;
             rising = true;
         } else if (dodging) {
@@ -113,26 +122,29 @@ public class Runner extends GameActor {
             currentAnimation = idleAnimationCat;
         }
 
+        //Draw animation to the left or right (depend on runner direction)
         if (runnerDir == direction.LEFT) {
             batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 + Constants.RUNNER_WIDTH * Constants.SCALE / 2, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
                     (-Constants.RUNNER_WIDTH * Constants.SCALE), Constants.RUNNER_HEIGHT * Constants.SCALE);
-
         } else {
             batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE / 2, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
                     (Constants.RUNNER_WIDTH * Constants.SCALE), Constants.RUNNER_HEIGHT * Constants.SCALE);
-
         }
-
-//        batch.draw(currentAnimation.getKeyFrame(stateTime, true), (Constants.APP_WIDTH  - Constants.RUNNER_WIDTH* Constants.SCALE)/2, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
-//                Constants.RUNNER_WIDTH*Constants.SCALE, Constants.RUNNER_HEIGHT * Constants.SCALE);
-
     }
 
+    /**
+     * Getter to UserData where runner informations like speed or positions are stored
+     * @return
+     */
     @Override
     public RunnerUserData getUserData() {
         return (RunnerUserData) userData;
     }
 
+    /**
+     *
+     * @param delta
+     */
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -143,29 +155,35 @@ public class Runner extends GameActor {
             getUserData().setLinearVelocity(body.getLinearVelocity());
 
         falling = body.getLinearVelocity().y < 0;
-
-//        if(againstWall)
-//            System.out.println(getUserData().getRunningPosition());
     }
 
+    /**
+     * Make runner go right.
+     * A linear velocity of (10f, actual body y velocity) is applied to the runner UserData
+     */
     public void runRight() {
         if (!dodging) {
             running = true;
             getUserData().setLinearVelocity(new Vector2(10f, body.getLinearVelocity().y));
-//            body.setLinearVelocity(10f,0);
             runnerDir = direction.RIGHT;
         }
     }
 
+    /**
+     * Make runner go left.
+     * A linear velocity of (-10f, actual body y velocity) is applied to the runner UserData
+     */
     public void runLeft() {
         if (!dodging) {
             getUserData().setLinearVelocity(new Vector2(-10f, body.getLinearVelocity().y));
-//            body.setLinearVelocity(-10f,0);
             running = true;
             runnerDir = direction.LEFT;
         }
     }
 
+    /**
+     * Stop the runner
+     */
     public void stopRunning() {
         running = false;
         if (!dodging) {
@@ -175,6 +193,9 @@ public class Runner extends GameActor {
         getUserData().setLinearVelocity(body.getLinearVelocity());
     }
 
+    /**
+     * Make the runner jump
+     */
     public void jump() {
         if (!(jumping || dodging) && !falling) {
             System.out.println("jump");
@@ -183,10 +204,16 @@ public class Runner extends GameActor {
         }
     }
 
+    /**
+     * Called when the runner touch the ground after a jump
+     */
     public void landed() {
         jumping = false;
     }
 
+    /**
+     * Make the runner crounch and slide if he's running
+     */
     public void dodge() {
         if (!jumping) {
 //            body.setTransform(body.getWorldCenter(), getUserData().getDodgeAngle());
@@ -195,7 +222,9 @@ public class Runner extends GameActor {
             getUserData().setLinearVelocity(new Vector2(0f, body.getLinearVelocity().y));
         }
     }
-
+    /**
+     * Interupt crounch or slide
+     */
     public void stopDodge() {
         dodging = false;
         body.setTransform(body.getWorldCenter(), 0f);
@@ -203,25 +232,32 @@ public class Runner extends GameActor {
         System.out.println("stopDodge");
     }
 
+    /**
+     * Getter for dodging boolean
+     * @return true if runner is dodging
+     */
     public boolean isDodging() {
         return dodging;
     }
 
+    /**
+     * Getter for jumping bolean
+     * @return true if runner is jumping
+     */
     public boolean isJumping() {
         return jumping;
     }
 
+    /**
+     * @return true if runner is ascending
+     */
     public boolean isRising() {
         return rising;
     }
 
-    public boolean isAgainstWall() {
-        return againstWall;
-    }
-
-    public void setAgainstWall(boolean againstWall) {
-        this.againstWall = againstWall;
-    }
+    /**
+     * @return direction of the runner
+     */
     public direction getRunnerDir() {
         return runnerDir;
     }

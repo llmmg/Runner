@@ -19,13 +19,16 @@ public class Background extends Actor {
     private Rectangle textureRegionBounds2;
     private int speed = 0;
 
+
     public Background() {
-        //TODO: multiple layout (like a static one for the sun and an infinite one for birds or something...)
         textureRegion = new TextureRegion(new Texture(Gdx.files.internal(Constants.BACKGROUND_IMAGE_PATH)));
         textureRegionBounds1 = new Rectangle(0 - Constants.APP_WIDTH / 2, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
         textureRegionBounds2 = new Rectangle(Constants.APP_WIDTH / 2, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
     }
 
+    /**
+     * @param delta time interval
+     */
     @Override
     public void act(float delta) {
         if (leftBoundsReached(delta)) {
@@ -35,9 +38,12 @@ public class Background extends Actor {
         } else {
             updateXBounds(-delta);
         }
-
     }
 
+    /**
+     * @param batch
+     * @param parentAlpha
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -47,25 +53,53 @@ public class Background extends Actor {
                 Constants.APP_HEIGHT);
     }
 
+    /**
+     * Return true when the left side of background is reached
+     *
+     * @param delta
+     * @return boolean
+     */
     private boolean leftBoundsReached(float delta) {
         return (textureRegionBounds2.x - (delta * speed)) <= 0;
     }
 
+    /**
+     * Return true when the right side of background is reached
+     *
+     * @param delta
+     * @return boolean
+     */
     private boolean rightBoundsReached(float delta) {
         return (textureRegionBounds2.x - (delta * speed)) > Constants.APP_WIDTH;
     }
 
+    /**
+     * Update background bounds positions compared to speed
+     *
+     * @param delta
+     */
     private void updateXBounds(float delta) {
         textureRegionBounds1.x += delta * speed;
         textureRegionBounds2.x += delta * speed;
     }
 
+    /**
+     * Setter for variable speed
+     *
+     * @param speed value to set for speed variable
+     */
     public void setSpeed(float speed) {
         this.speed = (int) speed * 13;
     }
 
 
-
+    /**
+     * Replace background bounds to initial position.
+     * Used to make the scrolling effect
+     *
+     * @param right true if rightBoundReached is true(if background scroll to the right)
+     *              false if leftBoundReached is true (if background scroll to the left)
+     */
     private void resetBounds(boolean right) {
         if (right) {
             textureRegionBounds2 = textureRegionBounds1;

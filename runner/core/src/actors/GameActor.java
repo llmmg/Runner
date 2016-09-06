@@ -12,10 +12,14 @@ public abstract class GameActor extends Actor {
     protected Body body;
     protected UserData userData;
 
+    /**
+     * GameActor class constructor
+     * @param body A rigid body
+     */
     public GameActor(Body body) {
         this.body = body;
         this.userData= (UserData)body.getUserData();
     }
 
-    public abstract  UserData getUserData();
+    public abstract UserData getUserData();
 }
