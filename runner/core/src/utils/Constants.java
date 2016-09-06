@@ -33,7 +33,8 @@ public class Constants {
     //useful for an infinite runner but not for our platformer
     public static final Vector2 RUNNER_VELOCITY = new Vector2(0, 0);
 
-    public static final String BACKGROUND_IMAGE_PATH = "core//assets//map//background3.png";
+    public static final String BACKGROUND_IMAGE_PATH = "core//assets//map//background%d.png";
+    public static final String MAP_TMX_PATH = "core//assets//map//level%d.tmx";
     public static final String BUTTON_PAUSE_IMG = "core//assets//pauseSkin.png";
     public static final String LABEL_TIMER_IMG = "core//assets//timerSkin.png";
 

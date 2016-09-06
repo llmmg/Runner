@@ -104,7 +104,7 @@ public class GameStage extends Stage implements ContactListener {
     }
 
     private void createWalls() {
-        tileMap = new TmxMapLoader().load("core\\assets\\map\\level" + game.getCurrentLevel() + ".tmx");
+        tileMap = new TmxMapLoader().load(String.format(Constants.MAP_TMX_PATH,game.getCurrentLevel()));
         tileMapWidth = tileMap.getProperties().get("width", Integer.class);
         tileMapHeight = tileMap.getProperties().get("height", Integer.class);
         tileSize = tileMap.getProperties().get("tilewidth", Integer.class);

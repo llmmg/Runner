@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.game.RunnerGame;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import utils.Constants;
 
@@ -13,7 +14,7 @@ import utils.Constants;
  * Created by Lancelot on 26.08.2016.
  */
 public class Background extends Actor {
-
+    private RunnerGame game;
     private final TextureRegion textureRegion;
     private Rectangle textureRegionBounds1;
     private Rectangle textureRegionBounds2;
@@ -21,7 +22,8 @@ public class Background extends Actor {
 
 
     public Background() {
-        textureRegion = new TextureRegion(new Texture(Gdx.files.internal(Constants.BACKGROUND_IMAGE_PATH)));
+        game = RunnerGame.getINSTANCE();
+        textureRegion = new TextureRegion(new Texture(Gdx.files.internal(String.format(Constants.BACKGROUND_IMAGE_PATH,game.getCurrentLevel()%2))));
         textureRegionBounds1 = new Rectangle(0 - Constants.APP_WIDTH / 2, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
         textureRegionBounds2 = new Rectangle(Constants.APP_WIDTH / 2, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
     }
