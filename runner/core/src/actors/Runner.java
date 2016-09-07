@@ -81,6 +81,7 @@ public class Runner extends GameActor {
     }
 
     /**
+     *  Need only a spriteSheet
      * @param texReg
      * @param name
      * @param nbImg
@@ -128,16 +129,6 @@ public class Runner extends GameActor {
             batch.draw(currentAnimation.getKeyFrame(stateTime, true), Constants.APP_WIDTH / 2 - Constants.RUNNER_WIDTH * Constants.SCALE / 2, (Constants.APP_HEIGHT - Constants.RUNNER_HEIGHT * Constants.SCALE) / 2,
                     (Constants.RUNNER_WIDTH * Constants.SCALE), Constants.RUNNER_HEIGHT * Constants.SCALE);
         }
-    }
-
-    /**
-     * Getter to UserData where runner information like speed or positions are stored
-     *
-     * @return
-     */
-    @Override
-    public RunnerUserData getUserData() {
-        return (RunnerUserData) userData;
     }
 
     /**
@@ -264,5 +255,15 @@ public class Runner extends GameActor {
      */
     public direction getRunnerDir() {
         return runnerDir;
+    }
+
+    /**
+     * Getter to UserData where runner information like speed or positions are stored
+     *
+     * @return
+     */
+    @Override
+    public RunnerUserData getUserData() {
+        return (RunnerUserData) userData;
     }
 }

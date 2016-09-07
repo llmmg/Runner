@@ -60,7 +60,6 @@ public class GameStage extends Stage implements ContactListener {
     private ButtonPause pauseButton;
     private TextScore textScore;
     private RunnerGame game;
-    private Vector3 touchPoint;
 
     public GameStage() {
         super(new ScalingViewport(Scaling.stretch, VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
@@ -75,7 +74,7 @@ public class GameStage extends Stage implements ContactListener {
     }
 
     /**
-     * Initialise world.
+     * Initialize world.
      * Call setUp functions
      */
     private void setUpWorld() {
@@ -91,11 +90,46 @@ public class GameStage extends Stage implements ContactListener {
     }
 
     /**
-     * Initialise background and add it in the stage
+     * Initialize background and add it in the stage
      */
     private void setUpBackground() {
         background = new Background();
         addActor(background);
+    }
+
+    /**
+     * Setup runner and add it to the stage.
+     */
+    private void setUpRunner() {
+        runner = new Runner(WorldUtils.createRunner(world));
+        addActor(runner);
+    }
+
+    private void setupCamera() {
+        camera = new OrthographicCamera(scale(VIEWPORT_WIDTH), scale(VIEWPORT_HEIGHT));
+        camera.position.set(scale(VIEWPORT_WIDTH) / 2, scale(VIEWPORT_HEIGHT) / 2, 0f);
+        camera.update();
+    }
+
+    private void setUpPause() {
+        pauseButton = new ButtonPause();
+        addActor(pauseButton.getButtonPause());
+    }
+
+    private void setUpScore() {
+        textScore = new TextScore();
+        addActor(textScore.getTextScore());
+    }
+
+    private void setUpEndLevel() {
+        textEndLevel = new TextEndLevel();
+        textEndLevel.showTextEndLevel(textScore.getTime());
+        addActor(textEndLevel.getTextEndLevel());
+        textEndLevel.setVisible(true);
+    }
+
+    public float scale(float valueToBeScaled) {
+        return valueToBeScaled / Constants.SCALE;
     }
 
     /**
@@ -112,20 +146,17 @@ public class GameStage extends Stage implements ContactListener {
         WorldUtils.createBlocks(layer, this, world);
 
         layer = (TiledMapTileLayer) tileMap.getLayers().get("invisible");
-//        createInvisible(layer);
         WorldUtils.createInvisibleCells(layer, this, world);
-
     }
 
     /**
      * libgdx beginContact function:
      * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ContactListener.html#beginContact-com.badlogic.gdx.physics.box2d.Contact-">beginContact</a>
      *
-     * @param contact
-     * <p>
-     *    Detect collisions between the runner and other body like ground, endLevel or deadZone.
-     *    Avoid the multi-jump for the runner.
-     * </p>
+     * @param contact <p>
+     *                Detect collisions between the runner and other body like ground, endLevel or deadZone.
+     *                Avoid the multi-jump for the runner.
+     *                </p>
      */
     @Override
     public void beginContact(Contact contact) {
@@ -188,10 +219,8 @@ public class GameStage extends Stage implements ContactListener {
      * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ContactListener.html#postSolve-com.badlogic.gdx.physics.box2d.Contact-com.badlogic.gdx.physics.box2d.ContactImpulse-">postSolve</a>
      *
      * @param contact
-     * @param impulse
-     * <p> Used to avoid the runner to keep running when he's against a wall
-     * </p>
-     *
+     * @param impulse <p> Used to avoid the runner to keep running when he's against a wall
+     *                </p>
      */
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
@@ -204,50 +233,14 @@ public class GameStage extends Stage implements ContactListener {
         }
     }
 
-    /**
-     * Setup runner and add it to the stage.
-     */
-    private void setUpRunner() {
-        runner = new Runner(WorldUtils.createRunner(world));
-        addActor(runner);
-    }
-
-
-    private void setupCamera() {
-        camera = new OrthographicCamera(scale(VIEWPORT_WIDTH), scale(VIEWPORT_HEIGHT));
-        camera.position.set(scale(VIEWPORT_WIDTH) / 2, scale(VIEWPORT_HEIGHT) / 2, 0f);
-        camera.update();
-    }
-
-    private void setUpPause() {
-        pauseButton = new ButtonPause();
-        addActor(pauseButton.getButtonPause());
-    }
-
-    private void setUpScore() {
-        textScore = new TextScore();
-        addActor(textScore.getTextScore());
-    }
-
-    private void setUpEndLevel() {
-        textEndLevel = new TextEndLevel();
-        textEndLevel.showTextEndLevel(textScore.getTime());
-        addActor(textEndLevel.getTextEndLevel());
-        textEndLevel.setVisible(true);
-    }
-
-    public float scale(float valueToBeScaled) {
-        return valueToBeScaled / Constants.SCALE;
-    }
-
 
     /**
      * libgdx act function:
      * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#act--">act</a>
-     * @param delta
-     * <p>
-     *     compute time steps
-     * </p>
+     *
+     * @param delta <p>
+     *              compute time steps
+     *              </p>
      */
     @Override
     public void act(float delta) {
@@ -271,7 +264,7 @@ public class GameStage extends Stage implements ContactListener {
      * libgdx draw function
      * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#draw--">draw</a>
      * <p>
-     *     Render camera, text score, background and tiled
+     * Render camera, text score, background and tiled
      * </p>
      */
     @Override
@@ -295,15 +288,14 @@ public class GameStage extends Stage implements ContactListener {
     /**
      * libgdx keyDown funciton:
      * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#keyDown-int-">keyDown</a>
-     * @param keycode
-     * @return
      *
-     * <p>
-     *     Read the key tiped. <br>
-     *         Up arrow call runner.jump().
-     *         Down arrow call runner.dodge() and runner.stopRunning().
-     *         Right arrow call runner.runRight().
-     *         Left arrow call runner.runLeft().
+     * @param keycode
+     * @return <p>
+     * Read the key tiped. <br>
+     * Up arrow call runner.jump().
+     * Down arrow call runner.dodge() and runner.stopRunning().
+     * Right arrow call runner.runRight().
+     * Left arrow call runner.runLeft().
      * </p>
      */
     @Override
@@ -331,11 +323,10 @@ public class GameStage extends Stage implements ContactListener {
     /**
      * libgdx keyUp function:
      * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#keyUp-int-">keyUp</a>
-     * @param keycode
-     * @return
      *
-     * <p>
-     *     Stop actions when key are released like running or dodging...
+     * @param keycode
+     * @return <p>
+     * Stop actions when key are released like running or dodging...
      * </p>
      */
     @Override

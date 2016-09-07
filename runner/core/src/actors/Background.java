@@ -21,6 +21,7 @@ public class Background extends Actor {
 
 
     public Background() {
+        //change the background in accordance with the current level
         game = RunnerGame.getINSTANCE();
         textureRegion = new TextureRegion(new Texture(Gdx.files.internal(String.format(Constants.BACKGROUND_IMAGE_PATH,game.getCurrentLevel()%2))));
         textureRegionBounds1 = new Rectangle(0 - Constants.APP_WIDTH / 2, 0, Constants.APP_WIDTH, Constants.APP_HEIGHT);
