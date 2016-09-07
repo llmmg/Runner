@@ -67,7 +67,7 @@ public class Runner extends GameActor {
      *
      * @param textureAtlas   Object that contain file path to the sprites data sheet
      * @param frames         Rectangular area of a texture. it's initialised in the function
-     * @param regionsNames   Name of sprites from data sheet
+     * @param regionsNames   sprites names from data sheet
      * @param animationSpeed Time between frames
      * @return Animation
      */
@@ -258,7 +258,7 @@ public class Runner extends GameActor {
     }
 
     /**
-     * Getter to UserData where runner information like speed or positions are stored
+     * UserData getter where runner information like speed or positions are stored
      *
      * @return
      */
