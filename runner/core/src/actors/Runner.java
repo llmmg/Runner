@@ -81,11 +81,10 @@ public class Runner extends GameActor {
     }
 
     /**
-     * @deprecated replaced by initAnimation
      * @param texReg
      * @param name
      * @param nbImg
-     *
+     * @deprecated replaced by initAnimation
      */
     public void createAnimation(TextureRegion[] texReg, String name, int nbImg) {
         spriteSheet = new Texture(Gdx.files.internal(name));
@@ -104,7 +103,9 @@ public class Runner extends GameActor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+
         stateTime += Gdx.graphics.getDeltaTime();
+
         if (running && !jumping) {
             currentAnimation = runningAnimation;
         } else if (falling) {
@@ -131,6 +132,7 @@ public class Runner extends GameActor {
 
     /**
      * Getter to UserData where runner information like speed or positions are stored
+     *
      * @return
      */
     @Override
@@ -140,7 +142,7 @@ public class Runner extends GameActor {
 
     /**
      * Libgdx act doc : <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html#act-float-">act</a>
-     *
+     * <p>
      * Update runner position and speed with data stored in UserData object.
      */
     @Override
@@ -222,6 +224,7 @@ public class Runner extends GameActor {
             getUserData().setLinearVelocity(new Vector2(0f, body.getLinearVelocity().y));
         }
     }
+
     /**
      * Interupt crounch or slide
      */
@@ -233,6 +236,7 @@ public class Runner extends GameActor {
 
     /**
      * Getter for dodging boolean
+     *
      * @return true if runner is dodging
      */
     public boolean isDodging() {
@@ -241,6 +245,7 @@ public class Runner extends GameActor {
 
     /**
      * Getter for jumping bolean
+     *
      * @return true if runner is jumping
      */
     public boolean isJumping() {

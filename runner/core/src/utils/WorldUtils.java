@@ -16,45 +16,22 @@ import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 /**
  * Created by Lancelot on 22.08.2016.
  * <p>
- * World components
+ *  World components
+ * </p>
  */
 public class WorldUtils {
+
 
     public static World createWorld() {
         return new World(Constants.WORLD_GRAVITY, true);
     }
 
-    public static Body createGround(World world) {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(new Vector2(Constants.GROUND_X, Constants.GROUND_Y));
-        Body body = world.createBody(bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.GROUND_WIDTH / 2, Constants.GROUND_HEIGHT / 2);
-        body.createFixture(shape, Constants.GROUND_DENSITY);
-
-        body.setUserData(new GroundUserData());
-
-        shape.dispose();
-        return body;
-    }
-
-    //Test class
-    public static Body createGround2(World world) {
-        //---use maps constants instead of ground one---
-        BodyDef bodyDef = new BodyDef();
-
-        bodyDef.position.set(new Vector2(10f, 2f));
-        Body body = world.createBody(bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(2f, 1f);
-        body.createFixture(shape, Constants.GROUND_DENSITY);
-
-        body.setUserData(new GroundUserData());
-
-        shape.dispose();
-        return body;
-    }
-
+    /**
+     * Create a runner body.
+     * The body has two fixture, a circle for the foot and a box for the rest of the runner (body+head)
+     * @param world
+     * @return
+     */
     public static Body createRunner(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -75,23 +52,27 @@ public class WorldUtils {
         circleShape.setPosition(new Vector2(0, -Constants.RUNNER_HEIGHT / 4));
         circleShape.setRadius(Constants.RUNNER_WIDTH / 2);
 
-//        PolygonShape shape = new PolygonShape();
-//        shape.setAsBox(Constants.RUNNER_WIDTH / 2, Constants.RUNNER_HEIGHT / 2);
 
         Body body = world.createBody(bodyDef);
         body.setGravityScale(Constants.RUNNER_GRAVITY_SCALE);
-//        body.createFixture(shape, Constants.RUNNER_DENSITY);
         body.createFixture(circleShape, 0);
         body.createFixture(chainShape, Constants.RUNNER_DENSITY);
         body.resetMassData();
         body.setUserData(new RunnerUserData());
 
-//        shape.dispose();
         chainShape.dispose();
         circleShape.dispose();
 
         return body;
     }
+
+    /**
+     * Create deaths cells and endlevel cells.
+     *
+     * @param layer the tiledMap layer with the invisible tile
+     * @param stage the stage to add the created objects (tiles)
+     * @param world the world where the tiles will be (physique world)
+     */
     public static void createInvisibleCells(TiledMapTileLayer layer,Stage stage,World world) {
         for (int row = 0; row < layer.getHeight(); row++) {
             for (int col = 0; col < layer.getWidth(); col++) {
@@ -122,17 +103,18 @@ public class WorldUtils {
                         break;
                 }
                 shape.dispose();
-                //cs.dispose();
-
             }
         }
-
     }
+
+    /**
+     * Create visible tiles.
+     * @param layer the tiledMap layer with the ground/obstacle tile
+     * @param stage the stage where the tiles are added to
+     * @param world apply the physics constants of world to the tiles. (like gravity)
+     */
     public static void createBlocks(TiledMapTileLayer layer,Stage stage,World world)
     {
-        // tile size
-        float ts = layer.getTileWidth();
-
         // go through all cells in layer
         for (int row = 0; row < layer.getHeight(); row++) {
             for (int col = 0; col < layer.getWidth(); col++) {
@@ -157,8 +139,6 @@ public class WorldUtils {
                 body.setUserData(new GroundUserData());
                 shape.dispose();
                 stage.addActor(new Ground(body));
-                //cs.dispose();
-
             }
         }
     }

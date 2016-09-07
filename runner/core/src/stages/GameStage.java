@@ -50,9 +50,6 @@ public class GameStage extends Stage implements ContactListener {
     private OrthographicCamera camera;
     private Box2DDebugRenderer renderer;
 
-    private Rectangle screenRightSide;
-    private Rectangle screenLeftSide;
-
     private TiledMap tileMap;
     private int tileMapWidth;
     private int tileMapHeight;
@@ -296,9 +293,18 @@ public class GameStage extends Stage implements ContactListener {
     }
 
     /**
-     * 
+     * libgdx keyDown funciton:
+     * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#keyDown-int-">keyDown</a>
      * @param keycode
      * @return
+     *
+     * <p>
+     *     Read the key tiped. <br>
+     *         Up arrow call runner.jump().
+     *         Down arrow call runner.dodge() and runner.stopRunning().
+     *         Right arrow call runner.runRight().
+     *         Left arrow call runner.runLeft().
+     * </p>
      */
     @Override
     public boolean keyDown(int keycode) {
@@ -322,6 +328,16 @@ public class GameStage extends Stage implements ContactListener {
         return super.keyDown(keycode);
     }
 
+    /**
+     * libgdx keyUp function:
+     * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#keyUp-int-">keyUp</a>
+     * @param keycode
+     * @return
+     *
+     * <p>
+     *     Stop actions when key are released like running or dodging...
+     * </p>
+     */
     @Override
     public boolean keyUp(int keycode) {
         if (runner.isDodging() && keycode == Input.Keys.DOWN) {
@@ -331,39 +347,6 @@ public class GameStage extends Stage implements ContactListener {
             runner.stopRunning();
         }
         return super.keyUp(keycode);
-    }
-
-    @Override
-    public boolean touchDown(int x, int y, int pointer, int button) {
-
-        return super.touchDown(x, y, pointer, button);
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (runner.isDodging()) {
-            runner.stopDodge();
-        }
-        return super.touchUp(screenX, screenY, pointer, button);
-    }
-
-
-    private boolean rightSideTouched(float x, float y) {
-        return screenRightSide.contains(x, y);
-    }
-
-    private boolean leftSideTouched(float x, float y) {
-        return screenLeftSide.contains(x, y);
-    }
-
-    /**
-     * Helper function to get the actual coordinates in my world
-     *
-     * @param x
-     * @param y
-     */
-    private void translateScreenToWorldCoordinates(int x, int y) {
-        getCamera().unproject(touchPoint.set(x, y, 0));
     }
 
 }

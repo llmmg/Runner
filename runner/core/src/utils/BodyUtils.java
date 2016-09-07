@@ -6,6 +6,9 @@ import enums.UserDataType;
 
 /**
  * Created by Lancelot on 23.08.2016.
+ * <p>
+ *     this class is used to determinate the type of a body userData
+ * </p>
  */
 public class BodyUtils {
 
