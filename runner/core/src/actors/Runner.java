@@ -192,7 +192,7 @@ public class Runner extends GameActor {
      */
     public void jump() {
         if (!(jumping || dodging) && !falling) {
-            System.out.println("jump");
+//            System.out.println("jump");
             body.applyLinearImpulse(getUserData().getJumpingLinearImpulse(), body.getWorldCenter(), true);
             jumping = true;
         }
@@ -210,7 +210,7 @@ public class Runner extends GameActor {
      */
     public void dodge() {
         if (!jumping) {
-            System.out.println("dodge");
+//            System.out.println("dodge");
             dodging = true;
             getUserData().setLinearVelocity(new Vector2(0f, body.getLinearVelocity().y));
         }
@@ -222,7 +222,7 @@ public class Runner extends GameActor {
     public void stopDodge() {
         dodging = false;
         stopRunning();
-        System.out.println("stopDodge");
+//        System.out.println("stopDodge");
     }
 
     /**

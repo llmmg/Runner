@@ -2,27 +2,19 @@ package stages;
 
 import actors.*;
 import actors.HUD.*;
-import box2d.DeadZoneUserData;
-import box2d.EndLevelUserData;
-import box2d.GroundUserData;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.RunnerGame;
 import utils.BodyUtils;
 import utils.Constants;
@@ -172,15 +164,14 @@ public class GameStage extends Stage implements ContactListener {
             if ((normal <= 0.2 && normal >= -0.2) && !runner.isRising()) {
                 runner.landed();
             }
-            System.out.println(normal);
+//            System.out.println(normal);
         }
         // contact between runner and deadzone
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsDeadZone(b)) ||
                 (BodyUtils.bodyIsDeadZone(a) && BodyUtils.bodyIsRunner(b))) {
             runner.landed();
             game.reset();
-
-            System.out.println("perdu");
+//            System.out.println("perdu");
         }
         if ((BodyUtils.bodyIsRunner(a) && BodyUtils.bodyIsEndLevel(b)) ||
                 (BodyUtils.bodyIsEndLevel(a) && BodyUtils.bodyIsRunner(b))) {
@@ -188,7 +179,7 @@ public class GameStage extends Stage implements ContactListener {
                 game.setEndLevel();
                 runner.landed();
                 setUpEndLevel();
-                System.out.println("Fin du niveau");
+//                System.out.println("Fin du niveau");
             }
         }
     }
@@ -224,7 +215,7 @@ public class GameStage extends Stage implements ContactListener {
      */
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-        System.out.println("postSolve");
+//        System.out.println("postSolve");
         //avoid the runner to run when he's against a wall
         if (runner.getRunnerDir() == Runner.direction.RIGHT && contact.getWorldManifold().getNormal().x == 1) {
             runner.stopRunning();
@@ -232,7 +223,6 @@ public class GameStage extends Stage implements ContactListener {
             runner.stopRunning();
         }
     }
-
 
     /**
      * libgdx act function:
@@ -264,7 +254,7 @@ public class GameStage extends Stage implements ContactListener {
      * libgdx draw function
      * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#draw--">draw</a>
      * <p>
-     * Render camera, text score, background and tiled
+     *     Render camera, text score, background and tiledmap
      * </p>
      */
     @Override
@@ -289,30 +279,29 @@ public class GameStage extends Stage implements ContactListener {
      * libgdx keyDown funciton:
      * <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html#keyDown-int-">keyDown</a>
      *
-     * @param keycode
-     * @return <p>
-     * Read the key tiped. <br>
-     * Up arrow call runner.jump().
-     * Down arrow call runner.dodge() and runner.stopRunning().
-     * Right arrow call runner.runRight().
-     * Left arrow call runner.runLeft().
+     * <p>
+     *     Read the key tiped. <br>
+     *         W key call runner.jump().
+     *         S key call runner.dodge() and runner.stopRunning().
+     *         D key call runner.runRight().
+     *         A key call runner.runLeft().
      * </p>
      */
     @Override
     public boolean keyDown(int keycode) {
         if (!game.getState()) {
             switch (keycode) {
-                case Input.Keys.UP:
+                case Input.Keys.W:
                     runner.jump();
                     break;
-                case Input.Keys.DOWN:
+                case Input.Keys.S:
                     runner.dodge();
                     runner.stopRunning();
                     break;
-                case Input.Keys.RIGHT:
+                case Input.Keys.D:
                     runner.runRight();
                     break;
-                case Input.Keys.LEFT:
+                case Input.Keys.A:
                     runner.runLeft();
                     break;
             }
@@ -331,10 +320,10 @@ public class GameStage extends Stage implements ContactListener {
      */
     @Override
     public boolean keyUp(int keycode) {
-        if (runner.isDodging() && keycode == Input.Keys.DOWN) {
+        if (runner.isDodging() && keycode == Input.Keys.S) {
             runner.stopDodge();
         }
-        if (keycode == Input.Keys.RIGHT || keycode == Input.Keys.LEFT) {
+        if (keycode == Input.Keys.D || keycode == Input.Keys.A) {
             runner.stopRunning();
         }
         return super.keyUp(keycode);
