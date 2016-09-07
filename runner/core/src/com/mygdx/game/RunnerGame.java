@@ -5,7 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import screens.GameScreen;
 
-//extends Game for multiple screen
+/**
+ * extends Game for multiple screen
+ */
+
 public class RunnerGame extends Game {
     private boolean isPause=false;
 	private int currentLevel =0;
@@ -15,6 +18,10 @@ public class RunnerGame extends Game {
 
     private static RunnerGame INSTANCE;
 
+	/**
+	 * return RunnerGame Instance
+	 * @return
+	 */
     public static RunnerGame getINSTANCE() {
         if (INSTANCE == null) {
             INSTANCE = new RunnerGame();
@@ -66,6 +73,9 @@ public class RunnerGame extends Game {
 		super.resume();
 	}
 
+	/**
+	 * Reset the current level
+	 */
 	public void reset(){
         try {
             if(!isEndLevel) {
@@ -77,7 +87,12 @@ public class RunnerGame extends Game {
             e.printStackTrace();
         }
     }
-    public boolean getState()
+
+	/**
+	 * Return if the game state is paused
+	 * @return
+	 */
+	public boolean getState()
     {
         return isPause;
     }
@@ -92,12 +107,26 @@ public class RunnerGame extends Game {
 			}
 		}
 	}
+
+	/**
+	 * Return the current level
+	 * @return
+	 */
 	public int getCurrentLevel(){
 		return currentLevel;
 	}
+
+	/**
+	 * Increase the current level when you finished a level
+	 * @return
+	 */
 	public int nextLevel(){
 		return currentLevel++;
 	}
+
+	/**
+	 * Called when you reach the end of a level
+	 */
 	public void setEndLevel(){
 		setPause();
 		isEndLevel=true;

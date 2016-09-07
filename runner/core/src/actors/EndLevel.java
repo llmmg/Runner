@@ -13,6 +13,9 @@ public class EndLevel extends GameActor {
         super(body);
     }
 
+    /**
+     * @return a endLevel typed userData
+     */
     @Override
     public EndLevelUserData getUserData() {
         return (EndLevelUserData)userData;

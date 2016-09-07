@@ -11,7 +11,9 @@ public class DeadZone extends GameActor {
     public DeadZone(Body body) {
         super(body);
     }
-
+    /**
+     * @return a deadZone typed userData
+     */
     @Override
     public DeadZoneUserData getUserData() {
         return (DeadZoneUserData)userData;
