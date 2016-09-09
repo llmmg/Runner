@@ -28,7 +28,7 @@ public class GameStage extends Stage implements ContactListener {
     private static final int VIEWPORT_WIDTH = Constants.APP_WIDTH;
     private static final int VIEWPORT_HEIGHT = Constants.APP_HEIGHT;
 
-    private boolean debug = true;
+    private boolean debug = false;
 
     private World world;
     private Ground ground;
